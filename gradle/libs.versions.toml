@@ -1,0 +1,96 @@
+[versions]
+agp = "8.5.0-alpha02"
+coilCompose = "2.6.0"
+firebaseBom = "32.8.0"
+kotlin = "1.9.23"
+coreKtx = "1.12.0"
+junit = "4.13.2"
+junitVersion = "1.1.5"
+espressoCore = "3.5.1"
+lifecycleRuntimeKtx = "2.7.0"
+activityCompose = "1.8.2"
+composeBom = "2024.03.00"
+fonts = "1.6.4"
+constraintlayoutCompose = "1.0.1"
+lifecycleViewmodelCompose = "2.7.0"
+navigationCompose = "2.7.7"
+runtimeLivedata = "1.6.4"
+material-icons = "1.6.4"
+lottie = "6.3.0"
+room = "2.6.1"
+kspVersion= "1.9.23-1.0.19"
+gms-services = "4.4.1"
+hilt-android-compiler = "1.2.0"
+hiltVersion = "2.49"
+hiltNavigationCompose = "1.2.0"
+playServicesAuth = "21.0.0"
+firebaseAuth = "22.3.1"
+
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-material3-window-size = { module = "androidx.compose.material3:material3-window-size-class" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+
+
+#hilt
+hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltVersion" }
+hiltCompiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltVersion"}
+hiltCompilerKapt = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hilt-android-compiler" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+
+#navigation Compose
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+
+
+#testing
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+
+#Design
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+googleFonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "fonts" }
+materialIcons ={ group = "androidx.compose.material", name = "material-icons-extended", version.ref = "material-icons" }
+lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
+
+#constraint layout
+androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
+
+
+#coil
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+
+
+#compose runtime and viewmodel
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
+androidx-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "runtimeLivedata" }
+
+
+#firebase
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
+
+
+#room
+room = { module = "androidx.room:room-runtime", version.ref = "room" }
+roomCompiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+roomKtx = { module = "androidx.room:room-ktx", version.ref = "room" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+gmsService = { id = "com.google.gms.google-services", version.ref ="gms-services"  }
+hiltAndroid = { id = "com.google.dagger.hilt.android", version.ref = "hiltVersion" }
+kotlinKsp = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }
+
