@@ -21,11 +21,11 @@ fun ImageRow(
     modifier: Modifier = Modifier,
     imageRow: List<String>,
     alpha: (Int) -> Float,
-   contentScale: ContentScale = ContentScale.Fit
+    contentScale: ContentScale = ContentScale.Fit
 
-    ) {
+) {
 
-     val imgUrl ="https://image.tmdb.org/t/p/w780/"
+    val imgUrl ="https://image.tmdb.org/t/p/w780/"
     Row(
         modifier = modifier.fillMaxWidth()
     ) {
@@ -40,9 +40,11 @@ fun ImageRow(
                     ).build(),
                 contentDescription = null,
                 modifier = modifierImg.alpha(alpha(index).coerceIn(0.0f, 1.0f)).weight(1f),
-               contentScale = contentScale,
+                contentScale = contentScale,
                 filterQuality = FilterQuality.High
             )
         }
     }
 }
+
+

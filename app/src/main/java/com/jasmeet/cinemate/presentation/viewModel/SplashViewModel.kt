@@ -104,11 +104,6 @@ class WindowSizeViewModel : ViewModel() {
             try {
                 val document = db.collection("splash_img").document("window_size").get().await()
                 val compact = document["Compact"] as Map<*, *>
-                val expanded = document["Expanded"] as Map<*, *>
-                val medium = document["Medium"] as Map<*, *>
-
-
-
                 val firstRow = compact["First Row"] as List<*>
                 val secondRow = compact["Second Row"] as List<*>
                 val thirdRow = compact["Third Row"] as List<*>
@@ -119,9 +114,7 @@ class WindowSizeViewModel : ViewModel() {
 
                 Log.d("WindowSizeViewModel", "First Row: $firstRow")
             } catch (e: Exception) {
-                // Handle error
-                // You can log the error or show a Toast message
-                // Note: You cannot directly show UI from here
+                Log.d("WindowSizeViewModel", "Error fetching data: ${e.message}")
             }
         }
     }

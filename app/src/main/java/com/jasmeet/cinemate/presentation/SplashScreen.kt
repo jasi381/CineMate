@@ -1,26 +1,35 @@
 package com.jasmeet.cinemate.presentation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.jasmeet.cinemate.presentation.appComponents.CustomTab
 import com.jasmeet.cinemate.presentation.appComponents.ImageRow
 import com.jasmeet.cinemate.presentation.appComponents.OverLayLayout
 import com.jasmeet.cinemate.presentation.viewModel.SplashScreenViewModel
@@ -37,13 +46,11 @@ fun SplashScreen(
     val splashScreenViewModel: SplashScreenViewModel = viewModel()
     val vm: WindowSizeViewModel = viewModel()
 
-    val mediumSize by vm.compactThirdRow.collectAsState()
-
-
-
-
-
-
+    val tabs = listOf("Login", "Signup")
+    var selectedTabIndex by rememberSaveable {
+        mutableIntStateOf(0)
+    }
+    val screenOrientation = LocalConfiguration.current.orientation
 
 
 
@@ -73,19 +80,32 @@ fun SplashScreen(
                     bottom.linkTo(imgLayout.bottom)
                 }
         )
-        Button(
-            onClick = {
-            },
-            modifier = Modifier.constrainAs(loginLayout) {
-                top.linkTo(imgLayout.bottom, margin = (-30).dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
 
+        Row(
+            Modifier.fillMaxWidth(.5f)
+                .constrainAs(loginLayout) {
+                    bottom.linkTo(imgLayout.bottom, margin = (30).dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+
+                }
+                .wrapContentWidth()
+                .clip(RoundedCornerShape(8.dp))
+                .background(color = Color(0xff333336))
+                .height(50.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            tabs.forEachIndexed { index, tab ->
+                CustomTab(
+                    text = tab, selectedTabIndex == index, index
+                ) {
+                    selectedTabIndex = it
+                }
             }
 
-        ) {
-            Text(text = "Get Started")
         }
+
     }
 
 
@@ -182,7 +202,7 @@ private fun ImageLayout(
 private fun calculateAlpha(index: Int, totalImages: Int): Float {
     return when (index) {
         0, totalImages - 1 -> 0.7f
-        else -> 0.5f
+        else -> 0.8f
     }
 }
 
