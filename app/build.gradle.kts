@@ -91,7 +91,8 @@ dependencies {
     implementation(libs.room)
     implementation(libs.roomKtx)
     implementation(libs.androidx.material3.window.size)
-    implementation ("com.google.code.gson:gson:2.10.1")
+    implementation (libs.firebase.analytics.ktx)
+
 
     ksp(libs.hiltCompiler)
     ksp(libs.hiltCompilerKapt)

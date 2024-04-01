@@ -38,7 +38,7 @@ fun RowScope.CustomTab(
         targetValue = if (isSelected) {
             Color.White
         } else {
-            Color.White
+            Color.White.copy(alpha = 0.5f)
         },
         animationSpec = tween(500, 0, LinearEasing),
         label = "Text Color",
@@ -93,7 +93,7 @@ fun RowScope.CustomTab(
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             textColor = tabTextColor,
-            modifier = Modifier.padding(vertical = 8.dp),
+            modifier = Modifier.padding(vertical = 4.dp),
 
             )
     }

@@ -1,121 +1,98 @@
 package com.jasmeet.cinemate.presentation.viewModel
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.content.Context
+import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.firestore
+import com.jasmeet.cinemate.presentation.utils.Utils
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
+
+@HiltViewModel
+class WindowSizeViewModel @Inject constructor (
+    private val auth : FirebaseAuth,
+    private val db : FirebaseFirestore,
+    @ApplicationContext private val context: Context
+
+)  : ViewModel() {
 
 
-class SplashScreenViewModel : ViewModel() {
-    private val db = Firebase.firestore
+    private val _firstRowImages = MutableStateFlow<List<String>>(emptyList())
+    val firstRowImages: StateFlow<List<String>> = _firstRowImages
 
+    private val _secondRowImages = MutableStateFlow<List<String>>(emptyList())
+    val secondRowImages: StateFlow<List<String>> = _secondRowImages
 
-    private val _mediumImages = MutableLiveData<List<String>>(emptyList())
-    val mediumImages: LiveData<List<String>> = _mediumImages
-
-    private val _expandedImages = MutableLiveData<List<String>>(emptyList())
-    val expandedImages: LiveData<List<String>> = _expandedImages
-
-    private val _compactImages = MutableLiveData<List<String>>(emptyList())
-    val compactImages: LiveData<List<String>> = _compactImages
-
+    private val _thirdRowImages = MutableStateFlow<List<String>>(emptyList())
+    val thirdRowImages: StateFlow<List<String>> = _thirdRowImages
 
     private var listenerRegistration: ListenerRegistration? = null
+
 
     init {
         listenForChanges()
     }
 
-
     private fun listenForChanges() {
-        val docRef = db.collection("splash_img").document("window_size")
-        listenerRegistration = docRef.addSnapshotListener { snapshot, exception ->
-            if (exception != null) {
-                Log.d("SplashScreenViewModel", "Listen failed.", exception)
-                return@addSnapshotListener
-            }
+        viewModelScope.launch(Dispatchers.IO) {
 
-            if (snapshot != null && snapshot.exists()) {
-                val compactWindowImagesList  = snapshot.data?.get("Compact") as? List<*>
-               val expandedWindowImagesList  = snapshot.data?.get("Expanded") as? List<*>
-                val mediumWindowImagesList  = snapshot.data?.get("Medium")?.javaClass
-               Log.d("SplashScreenViewModel", "Current data: ${mediumWindowImagesList}")
+            val docRef = db.collection("splash_img").document("window_size")
 
+            listenerRegistration = docRef.addSnapshotListener { snapshot, exception ->
+                if (exception != null) {
+                    Utils.logEvent(
+                        "SplashScreen View-Model Error",
+                        Bundle().apply {
+                            putString("error", exception.message)
+                        },
+                        context
 
+                    )
+                    return@addSnapshotListener
+                }
 
-            } else {
-                Log.d("SplashScreenViewModel", "Current data: null")
+                if (snapshot != null && snapshot.exists()) {
+                    val compact = snapshot.data?.get("Compact") as? Map<*, *>
+                    val firstRow = compact?.get("First Row") as? List<*>
+                    val secondRow = compact?.get("Second Row") as? List<*>
+                    val thirdRow = compact?.get("Third Row") as? List<*>
+
+                    viewModelScope.launch(Dispatchers.Main) {
+                        _firstRowImages.value = firstRow?.map { it.toString() } ?: emptyList()
+                        _secondRowImages.value = secondRow?.map { it.toString() } ?: emptyList()
+                        _thirdRowImages.value = thirdRow?.map { it.toString() } ?: emptyList()
+                    }
+
+                    Utils.logEvent(
+                        "SplashScreen View Model Success",
+                        Bundle().apply {
+                            putString("success", "Current data is not null")
+                        },
+                        context
+                    )
+
+                } else {
+                    Utils.logEvent(
+                        "SplashScreen View Model Error",
+                        Bundle().apply {
+                            putString("error", "Current data is null")
+                        },
+                        context
+                    )
+                }
             }
         }
     }
-
-    suspend fun getMediumImages()  {
-        val docRef = db.collection("splash_img").document("window_size")
-        val snapshot = docRef.get().await()
-
-        val mediumImages = snapshot.get("Medium")
-
-
-
-    }
-
-
     override fun onCleared() {
         super.onCleared()
-        // Remove the snapshot listener when the ViewModel is cleared
         listenerRegistration?.remove()
-    }
-}
-data class MediumImages(
-    val firstRow : List<String>,
-    val secondRow : List<String>,
-    val thirdRow : List<String>
-)
-
-
-
-
-class WindowSizeViewModel : ViewModel() {
-    private val db = FirebaseFirestore.getInstance()
-
-    // StateFlow objects for the fetched data
-    private val _compactFirstRow = MutableStateFlow<List<String>>(emptyList())
-    private val _compactSecondRow = MutableStateFlow<List<String>>(emptyList())
-    private val _compactThirdRow = MutableStateFlow<List<String>>(emptyList())
-
-
-    // Expose StateFlow as immutable properties
-    val compactFirstRow: StateFlow<List<String>> = _compactFirstRow
-    val compactSecondRow: StateFlow<List<String>> = _compactSecondRow
-    val compactThirdRow: StateFlow<List<String>> = _compactThirdRow
-
-    fun fetchWindowSize() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val document = db.collection("splash_img").document("window_size").get().await()
-                val compact = document["Compact"] as Map<*, *>
-                val firstRow = compact["First Row"] as List<*>
-                val secondRow = compact["Second Row"] as List<*>
-                val thirdRow = compact["Third Row"] as List<*>
-
-                _compactFirstRow.value = firstRow.map { it.toString() }
-                _compactSecondRow.value = secondRow.map { it.toString() }
-                _compactThirdRow.value = thirdRow.map { it.toString() }
-
-                Log.d("WindowSizeViewModel", "First Row: $firstRow")
-            } catch (e: Exception) {
-                Log.d("WindowSizeViewModel", "Error fetching data: ${e.message}")
-            }
-        }
     }
 }

@@ -50,7 +50,10 @@ import com.jasmeet.cinemate.presentation.theme.GradientColor2
 import com.jasmeet.cinemate.presentation.theme.GradientColor3
 import com.jasmeet.cinemate.presentation.theme.GradientColor4
 import com.jasmeet.cinemate.presentation.theme.GradientColor5
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,23 +68,6 @@ class MainActivity : ComponentActivity() {
     }
 
 }
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CineMateTheme {
-        Content()
-    }
-}
-
 
 @Composable
 fun Content(modifier: Modifier = Modifier) {

@@ -10,14 +10,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
+import com.jasmeet.cinemate.presentation.theme.sans
 
 @Composable
 fun TextComponent(
     modifier: Modifier = Modifier,
     text: String,
     textColor: Color = Color.Black,
-    textSize: TextUnit = 16.sp,
-    fontFamily: FontFamily = FontFamily.SansSerif,
+    textSize: TextUnit = 18.sp,
+    fontFamily: FontFamily = sans,
     fontWeight: FontWeight = FontWeight.Normal,
     textAlign: TextAlign = TextAlign.Start,
     lineHeight: TextUnit = 24.sp,

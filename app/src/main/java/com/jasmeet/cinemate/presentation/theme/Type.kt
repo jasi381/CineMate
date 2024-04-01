@@ -31,3 +31,9 @@ val sans = FontFamily(
         fontProvider = provider,
     )
 )
+val libreBaskerville = FontFamily(
+    androidx.compose.ui.text.googlefonts.Font(
+        googleFont = GoogleFont("Libre Baskerville"),
+        fontProvider = provider,
+    )
+)

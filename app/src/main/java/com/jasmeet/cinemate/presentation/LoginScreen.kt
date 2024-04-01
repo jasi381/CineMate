@@ -1,17 +1,25 @@
 package com.jasmeet.cinemate.presentation
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -24,35 +32,24 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.jasmeet.cinemate.presentation.appComponents.CustomTab
 import com.jasmeet.cinemate.presentation.appComponents.ImageRow
-import com.jasmeet.cinemate.presentation.appComponents.OverLayLayout
-import com.jasmeet.cinemate.presentation.viewModel.SplashScreenViewModel
 import com.jasmeet.cinemate.presentation.viewModel.WindowSizeViewModel
 
-@Composable
-fun SplashScreen(
 
+@Composable
+fun LoginScreen(
     navController: NavHostController,
     windowSize: WindowSizeClass
 ) {
-
-
-    val splashScreenViewModel: SplashScreenViewModel = viewModel()
-    val vm: WindowSizeViewModel = viewModel()
-
     val tabs = listOf("Login", "Signup")
     var selectedTabIndex by rememberSaveable {
         mutableIntStateOf(0)
     }
-    val screenOrientation = LocalConfiguration.current.orientation
-
-
 
     ConstraintLayout(
         modifier = Modifier
@@ -60,10 +57,9 @@ fun SplashScreen(
             .background(Color(0xff212121))
     ) {
 
-        val (imgLayout, overlay, loginLayout) = createRefs()
+        val (imgLayout,loginSlider, loginLayout) = createRefs()
 
         ImageLayout(
-            v = splashScreenViewModel,
             modifier = Modifier.constrainAs(imgLayout) {
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)
@@ -71,26 +67,17 @@ fun SplashScreen(
             },
             windowSize = windowSize
         )
-        OverLayLayout(
-            modifier = Modifier
-                .constrainAs(overlay) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(imgLayout.bottom)
-                }
-        )
 
         Row(
-            Modifier.fillMaxWidth(.5f)
-                .constrainAs(loginLayout) {
-                    bottom.linkTo(imgLayout.bottom, margin = (30).dp)
+            Modifier
+                .fillMaxWidth(.5f)
+                .constrainAs(loginSlider) {
+                    bottom.linkTo(imgLayout.bottom, margin = (10).dp)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-
                 }
                 .wrapContentWidth()
-                .clip(RoundedCornerShape(8.dp))
+                .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
                 .background(color = Color(0xff333336))
                 .height(50.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -106,31 +93,70 @@ fun SplashScreen(
 
         }
 
+        AnimatedContent(
+            targetState = selectedTabIndex,
+            modifier = Modifier
+                .fillMaxWidth(0.5f)
+                .fillMaxHeight(0.4f)
+                .constrainAs(loginLayout) {
+                    top.linkTo(loginSlider.bottom)
+                    start.linkTo(loginSlider.start)
+                    end.linkTo(loginSlider.end)
+                }, label = "",
+            transitionSpec ={
+                slideInHorizontally (animationSpec = tween(400),
+                    initialOffsetX = {
+                        if (targetState == 0) it else -it
+                    },
+
+                    ) togetherWith
+                        fadeOut(animationSpec = tween(50))
+            }
+        ) { targetTabIndex ->
+            Surface(
+                color = Color(0xff333336),
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+                    .fillMaxHeight(0.4f),
+                shape = RoundedCornerShape(bottomEnd = 8.dp, bottomStart = 8.dp)
+            ) {
+                when (targetTabIndex) {
+                    0 -> Box(
+                        Modifier
+                            .fillMaxSize()
+                            .background(Color.White)
+                    ) {
+                        Text(text = "Hello world", modifier = Modifier.padding(5.dp))
+                    }
+                    1 ->
+                        Box(
+                            Modifier
+                                .fillMaxSize()
+                                .background(Color.Cyan)
+                        ) {
+                            Text(text = "Hello Bro", modifier = Modifier.padding(5.dp))
+                        }
+                }
+            }
+        }
     }
-
-
-
-
-
 
 }
 
 @Composable
 private fun ImageLayout(
-    v: SplashScreenViewModel,
     modifier: Modifier,
     windowSize: WindowSizeClass,
+    windowSizeViewModel: WindowSizeViewModel = hiltViewModel()
 ) {
 
-    val vm: WindowSizeViewModel = viewModel()
 
-    LaunchedEffect(Unit) {
-        vm.fetchWindowSize()
-    }
 
-    val compactFirstRow by vm.compactFirstRow.collectAsState()
-    val compactSecondRow by vm.compactSecondRow.collectAsState()
-    val compactThirdRow by vm.compactThirdRow.collectAsState()
+    val compactFirstRow by windowSizeViewModel.firstRowImages.collectAsState()
+    val compactSecondRow by windowSizeViewModel.secondRowImages.collectAsState()
+    val compactThirdRow by windowSizeViewModel.thirdRowImages.collectAsState()
+
+    val imageHeight = calculateImageHeight(windowSize.widthSizeClass)
 
 
     ConstraintLayout(
@@ -153,11 +179,11 @@ private fun ImageLayout(
 
                 .fillMaxWidth()
                 .alpha(0.8f)
-                .blur(0.6.dp),
+                .blur(0.5.dp),
             contentScale = ContentScale.FillBounds,
-            modifierImg = Modifier.fillMaxHeight(if (
-                windowSize.widthSizeClass == WindowWidthSizeClass.Compact || windowSize.widthSizeClass == WindowWidthSizeClass.Medium
-            ) 0.3f else 0.33f).fillMaxWidth(),
+            modifierImg = Modifier
+                .fillMaxHeight(imageHeight)
+                .fillMaxWidth(),
 
             )
 
@@ -170,12 +196,12 @@ private fun ImageLayout(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }
-                .blur(0.4.dp)
+                .blur(0.5.dp)
                 .alpha(0.7f),
             contentScale = ContentScale.FillBounds,
-            modifierImg = Modifier.fillMaxHeight(if (
-                windowSize.widthSizeClass == WindowWidthSizeClass.Compact || windowSize.widthSizeClass == WindowWidthSizeClass.Medium
-            ) 0.3f else 0.33f).fillMaxWidth(),
+            modifierImg = Modifier
+                .fillMaxHeight(imageHeight)
+                .fillMaxWidth(),
         )
 
         ImageRow(
@@ -188,10 +214,10 @@ private fun ImageLayout(
                     end.linkTo(parent.end)
                 }
                 .alpha(0.6f)
-                .blur(0.6.dp),
-            modifierImg = Modifier.fillMaxHeight(if (
-                windowSize.widthSizeClass == WindowWidthSizeClass.Compact || windowSize.widthSizeClass == WindowWidthSizeClass.Medium
-            ) 0.3f else 0.33f).fillMaxWidth(),
+                .blur(0.5.dp),
+            modifierImg = Modifier
+                .fillMaxHeight(imageHeight)
+                .fillMaxWidth(),
             contentScale = ContentScale.FillBounds,
 
             )
@@ -199,10 +225,18 @@ private fun ImageLayout(
 }
 
 
+private fun calculateImageHeight(widthSizeClass: WindowWidthSizeClass): Float {
+    return if (widthSizeClass == WindowWidthSizeClass.Compact || widthSizeClass == WindowWidthSizeClass.Medium) {
+        0.3f
+    } else {
+        0.33f
+    }
+}
+
 private fun calculateAlpha(index: Int, totalImages: Int): Float {
     return when (index) {
-        0, totalImages - 1 -> 0.7f
-        else -> 0.8f
+        0, totalImages - 1 -> 0.6f
+        else -> 0.5f
     }
 }
 
