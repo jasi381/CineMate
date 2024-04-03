@@ -1,5 +1,5 @@
 [versions]
-agp = "8.5.0-alpha02"
+agp = "8.5.0-alpha03"
 coilCompose = "2.6.0"
 firebaseBom = "32.8.0"
 kotlin = "1.9.23"
@@ -14,6 +14,7 @@ fonts = "1.6.4"
 constraintlayoutCompose = "1.0.1"
 lifecycleViewmodelCompose = "2.7.0"
 navigationCompose = "2.7.7"
+playServicesTagmanager = "18.0.4"
 runtimeLivedata = "1.6.4"
 material-icons = "1.6.4"
 lottie = "6.3.0"
@@ -84,6 +85,7 @@ firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx"
 
 
 #room
+play-services-tagmanager = { module = "com.google.android.gms:play-services-tagmanager", version.ref = "playServicesTagmanager" }
 room = { module = "androidx.room:room-runtime", version.ref = "room" }
 roomCompiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 roomKtx = { module = "androidx.room:room-ktx", version.ref = "room" }

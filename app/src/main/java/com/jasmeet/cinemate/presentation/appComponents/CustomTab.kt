@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -46,6 +47,7 @@ fun RowScope.CustomTab(
 
     Box(
         modifier = Modifier
+            .clip(RoundedCornerShape(topEnd = 8.dp, topStart = 8.dp))
             .weight(1f)
             .clickable(
                 interactionSource = interactionSource,

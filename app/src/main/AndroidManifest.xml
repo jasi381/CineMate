@@ -18,6 +18,7 @@
             android:name=".presentation.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
+            android:windowSoftInputMode="adjustResize"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.CineMate">
             <intent-filter>

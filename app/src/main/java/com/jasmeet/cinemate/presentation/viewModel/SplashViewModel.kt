@@ -1,15 +1,15 @@
 package com.jasmeet.cinemate.presentation.viewModel
 
-import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
-import com.jasmeet.cinemate.presentation.utils.Utils
+import com.jasmeet.cinemate.domain.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,11 +17,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class WindowSizeViewModel @Inject constructor (
-    private val auth : FirebaseAuth,
+class SignInViewModel @Inject constructor (
     private val db : FirebaseFirestore,
-    @ApplicationContext private val context: Context
-
+    private val analytics :FirebaseAnalytics,
+    private val userRepository: UserRepository
 )  : ViewModel() {
 
 
@@ -36,6 +35,21 @@ class WindowSizeViewModel @Inject constructor (
 
     private var listenerRegistration: ListenerRegistration? = null
 
+    private val _authState = MutableStateFlow<AuthResult?>(null)
+    val authState: StateFlow<AuthResult?> = _authState
+
+    private val _errorState = MutableStateFlow<String?>(null)
+    val errorState: StateFlow<String?> = _errorState
+
+    private val debounceTimeMillis = 5000L
+    private var lastErrorShownTime = 0L
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
+    private val state = MutableStateFlow<Boolean>(false)
+    val stateFlow: StateFlow<Boolean> = state
+
 
     init {
         listenForChanges()
@@ -48,14 +62,17 @@ class WindowSizeViewModel @Inject constructor (
 
             listenerRegistration = docRef.addSnapshotListener { snapshot, exception ->
                 if (exception != null) {
-                    Utils.logEvent(
-                        "SplashScreen View-Model Error",
-                        Bundle().apply {
-                            putString("error", exception.message)
-                        },
-                        context
 
-                    )
+                    try {
+                        analytics.logEvent("splashScreen_view_model_error", Bundle().apply {
+                            putString("error", exception.message)
+                        })
+
+                    }catch (e:Exception){
+                        Log.e("Error", e.message.toString())
+                    }
+
+
                     return@addSnapshotListener
                 }
 
@@ -71,28 +88,58 @@ class WindowSizeViewModel @Inject constructor (
                         _thirdRowImages.value = thirdRow?.map { it.toString() } ?: emptyList()
                     }
 
-                    Utils.logEvent(
-                        "SplashScreen View Model Success",
-                        Bundle().apply {
-                            putString("success", "Current data is not null")
-                        },
-                        context
-                    )
+                    analytics.logEvent("splashScreen_view_model_success", Bundle().apply {
+                        putString("success", "Images updated")
+                    })
+
+
 
                 } else {
-                    Utils.logEvent(
-                        "SplashScreen View Model Error",
-                        Bundle().apply {
-                            putString("error", "Current data is null")
-                        },
-                        context
-                    )
+                    analytics.logEvent("splashScreen_view_model_error", Bundle().apply {
+                        putString("error", "Document does not exist")
+                    })
+
                 }
             }
         }
     }
+
+    fun setErrorMessage(errorMessage: String?) {
+        val currentTimeMillis = System.currentTimeMillis()
+        if (errorMessage != null && (currentTimeMillis - lastErrorShownTime) >= debounceTimeMillis) {
+            _errorState.value = errorMessage
+            lastErrorShownTime = currentTimeMillis
+
+        } else if (errorMessage == null) {
+            _errorState.value = null
+            lastErrorShownTime = 0L
+        }
+    }
+
+    fun signUpEmailPassword(email: String, password: String) {
+        viewModelScope.launch {
+            try {
+                _isLoading.value = true
+                val result = userRepository.signUpWithEmailAndPassword(email, password)
+                _authState.value = result
+                userRepository.saveUserDataToFirestore(result)
+                _isLoading.value = false
+                state.value = true
+            } catch (e: Exception) {
+                setErrorMessage(e.message)
+                _isLoading.value = false
+                state.value = false
+            }
+        }
+    }
+
+
     override fun onCleared() {
         super.onCleared()
         listenerRegistration?.remove()
     }
+
+
+
+
 }
