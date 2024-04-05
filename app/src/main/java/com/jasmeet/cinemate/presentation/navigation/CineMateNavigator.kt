@@ -1,5 +1,8 @@
 package com.jasmeet.cinemate.presentation.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,7 +24,7 @@ import com.jasmeet.cinemate.presentation.screens.SplashScreen
 @Composable
 fun CineMateNavigator(
     windowSize: WindowSizeClass,
-    navController : NavHostController
+    navController: NavHostController
 ) {
 
 
@@ -30,58 +33,154 @@ fun CineMateNavigator(
         startDestination = Screens.Splash.route
     ) {
 
-        composable(Screens.Splash.route){
+        composable(
+            route = Screens.Splash.route,
+            enterTransition = {
+                return@composable fadeIn(tween(1000))
+            }, exitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            }, popEnterTransition = {
+                return@composable fadeIn(tween(1000))
+            },
+            popExitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            }
+        ) {
             SplashScreen(navController = navController)
         }
-        composable(Screens.Login.route){
+        composable(
+            route = Screens.Login.route,
+            enterTransition = {
+                return@composable fadeIn(tween(1000))
+            }, exitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            }, popEnterTransition = {
+                return@composable fadeIn(tween(1000))
+            },
+            popExitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            }
+        ) {
             LoginScreen(
                 navController = navController,
                 windowSize = windowSize
             )
         }
-        composable(Screens.Home.route){
+        composable(
+            route = Screens.Home.route,
+            enterTransition = {
+                return@composable fadeIn(tween(1000))
+            }, exitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            }, popEnterTransition = {
+                return@composable fadeIn(tween(1000))
+            },
+            popExitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            }
+        ) {
             Column(
                 Modifier
                     .fillMaxSize()
                     .background(Color(0xff131313)),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
                 Text(text = "Home", color = Color.White, fontSize = 22.sp)
             }
         }
 
-        composable(Screens.Search.route){
+        composable(
+            route = Screens.Search.route,
+            enterTransition = {
+                return@composable fadeIn(tween(1000))
+            }, exitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            }, popEnterTransition = {
+                return@composable fadeIn(tween(1000))
+            },
+            popExitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            }
+        ) {
             Column(
                 Modifier
                     .fillMaxSize()
                     .background(Color(0xff131313)),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
                 Text(text = "Search", color = Color.White, fontSize = 22.sp)
             }
         }
-        composable(Screens.Wishlist.route){
+        composable(
+            route = Screens.Wishlist.route,
+            enterTransition = {
+                return@composable fadeIn(tween(1000))
+            }, exitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            }, popEnterTransition = {
+                return@composable fadeIn(tween(1000))
+            },
+            popExitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            }
+        ) {
             Column(
                 Modifier
                     .fillMaxSize()
                     .background(Color(0xff131313)),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
                 Text(text = "Wishlist", color = Color.White, fontSize = 22.sp)
             }
         }
 
-        composable(Screens.Profile.route){
+        composable(
+            route = Screens.Profile.route,
+            enterTransition = {
+                return@composable fadeIn(tween(1000))
+            }, exitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            }, popEnterTransition = {
+                return@composable fadeIn(tween(1000))
+            },
+            popExitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            }
+        ) {
             Column(
                 Modifier
                     .fillMaxSize()
                     .background(Color(0xff131313)),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
                 Text(text = "Profile", color = Color.White, fontSize = 22.sp)
             }
         }
