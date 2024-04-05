@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -19,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.jasmeet.cinemate.presentation.appComponents.CustomTab2
 import com.jasmeet.cinemate.presentation.theme.customShapeTopCorners
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
 
