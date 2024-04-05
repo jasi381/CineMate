@@ -94,6 +94,13 @@ dependencies {
     implementation (libs.firebase.analytics.ktx)
     implementation(libs.play.services.tagmanager)
     implementation(libs.toast.magic)
+    implementation (libs.landscapist.bom)
+
+    // Import landscapist libraries
+    implementation (libs.landscapist.coil)
+    implementation (libs.landscapist.placeholder)
+    implementation (libs.landscapist.animation)
+
 
 
 

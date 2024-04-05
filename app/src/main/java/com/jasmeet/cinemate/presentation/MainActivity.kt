@@ -70,10 +70,11 @@ fun CineMateApp(
                     screens = navigationItems
                 )
         }
-    ) {
+    ) { paddingValues ->
         CineMateNavigator(
             windowSize = windowSize,
             navController = navController,
+            paddingValues = paddingValues
         )
     }
 

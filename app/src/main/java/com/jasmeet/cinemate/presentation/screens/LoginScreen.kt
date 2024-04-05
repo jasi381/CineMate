@@ -168,8 +168,6 @@ fun LoginScreen(
     )
 
 
-
-
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -209,7 +207,9 @@ fun LoginScreen(
 
             tabs.forEachIndexed { index, tab ->
                 CustomTab(
-                    text = tab, selectedTabIndex == index, index
+                    text = tab,
+                    isSelected = selectedTabIndex == index,
+                    index
                 ) {
                     selectedTabIndex = it
                 }

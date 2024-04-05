@@ -6,7 +6,9 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
@@ -17,20 +19,24 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.jasmeet.cinemate.presentation.screens.HomeScreen
 import com.jasmeet.cinemate.presentation.screens.LoginScreen
 import com.jasmeet.cinemate.presentation.screens.Screens
+import com.jasmeet.cinemate.presentation.screens.SearchScreen
 import com.jasmeet.cinemate.presentation.screens.SplashScreen
 
 @Composable
 fun CineMateNavigator(
     windowSize: WindowSizeClass,
-    navController: NavHostController
+    navController: NavHostController,
+    paddingValues: PaddingValues
 ) {
 
 
     NavHost(
         navController = navController,
-        startDestination = Screens.Splash.route
+        startDestination = Screens.Splash.route,
+        modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())
     ) {
 
         composable(
@@ -91,15 +97,7 @@ fun CineMateNavigator(
                 )
             }
         ) {
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .background(Color(0xff131313)),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(text = "Home", color = Color.White, fontSize = 22.sp)
-            }
+            HomeScreen()
         }
 
         composable(
@@ -119,15 +117,7 @@ fun CineMateNavigator(
                 )
             }
         ) {
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .background(Color(0xff131313)),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(text = "Search", color = Color.White, fontSize = 22.sp)
-            }
+            SearchScreen(navController = navController)
         }
         composable(
             route = Screens.Wishlist.route,

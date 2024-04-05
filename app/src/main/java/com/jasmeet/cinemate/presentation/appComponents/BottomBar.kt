@@ -32,7 +32,7 @@ fun BottomBar(
 ) {
     NavigationBar(
         tonalElevation = 10.dp,
-        containerColor = Color.Transparent,
+        containerColor = Color(0xff131313),
     ) {
         screens.forEach { screen ->
             AddBottomNavItem(
@@ -52,6 +52,7 @@ fun RowScope.AddBottomNavItem(
 ) {
     val context = LocalContext.current
 
+    val isSelected = currentDestination?.route == screen.route
 
     BackHandler {
         if (currentDestination?.route == Screens.Home.route) {
@@ -86,9 +87,9 @@ fun RowScope.AddBottomNavItem(
         },
         icon = {
             Icon(
-                imageVector = ImageVector.vectorResource(id = if (currentDestination?.route == screen.route)screen.selectedIcon else screen.unselectedIcon),
+                imageVector = ImageVector.vectorResource(id = if (isSelected) screen.selectedIcon else screen.unselectedIcon),
                 contentDescription = "Icon",
-                tint = if (currentDestination?.route == screen.route) {
+                tint = if (isSelected) {
                     Color(0xffF2C94C)
                 } else {
                     Color.White
@@ -105,12 +106,10 @@ fun RowScope.AddBottomNavItem(
                         Color(0xffF2C94C)
                     } else {
                         Color.White
-
                     },
                     textAlign = TextAlign.Center,
                 ),
-
-                )
+            )
         }
     )
 }
