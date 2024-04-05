@@ -11,6 +11,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.jasmeet.cinemate.domain.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -47,12 +48,19 @@ class SignInViewModel @Inject constructor (
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    private val state = MutableStateFlow<Boolean>(false)
+    private val state = MutableStateFlow(false)
     val stateFlow: StateFlow<Boolean> = state
+
 
 
     init {
         listenForChanges()
+        viewModelScope.launch {
+            while (true) {
+                delay(debounceTimeMillis)
+                setErrorMessage(null)
+            }
+        }
     }
 
     private fun listenForChanges() {
@@ -133,13 +141,26 @@ class SignInViewModel @Inject constructor (
         }
     }
 
+    fun loginWithEmailPassword(email: String, password: String) {
+        viewModelScope.launch {
+            try {
+                _isLoading.value = true
+                val result = userRepository.loginWithEmailAndPassword(email, password)
+                _authState.value = result
+                _isLoading.value = false
+                state.value = true
+            } catch (e: Exception) {
+                setErrorMessage(e.message)
+                _isLoading.value = false
+                state.value = false
+            }
+        }
+    }
+
 
     override fun onCleared() {
         super.onCleared()
         listenerRegistration?.remove()
     }
-
-
-
 
 }

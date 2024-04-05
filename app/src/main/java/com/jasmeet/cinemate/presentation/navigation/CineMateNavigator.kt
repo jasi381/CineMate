@@ -10,7 +10,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.jasmeet.cinemate.presentation.LoginScreen
+import com.jasmeet.cinemate.presentation.screens.LoginScreen
+import com.jasmeet.cinemate.presentation.screens.Screens
+import com.jasmeet.cinemate.presentation.screens.SplashScreen
 
 @Composable
 fun CineMateNavigator(windowSize: WindowSizeClass) {
@@ -19,16 +21,23 @@ fun CineMateNavigator(windowSize: WindowSizeClass) {
 
     NavHost(
         navController = navController,
-        startDestination = "splash"
+        startDestination = Screens.Splash.route
     ) {
-        composable("splash"){
+
+        composable(Screens.Splash.route){
+         SplashScreen(navController = navController,)
+        }
+        composable(Screens.Login.route){
             LoginScreen(
                 navController = navController,
                 windowSize = windowSize
             )
         }
-        composable("home"){
-            Column(Modifier.fillMaxSize().background(Color.Cyan)) {
+        composable(Screens.Home.route){
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .background(Color.Cyan)) {
 
             }
         }

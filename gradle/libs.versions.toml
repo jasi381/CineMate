@@ -9,14 +9,14 @@ junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 lifecycleRuntimeKtx = "2.7.0"
 activityCompose = "1.8.2"
-composeBom = "2024.03.00"
-fonts = "1.6.4"
+composeBom = "2024.04.00"
+fonts = "1.6.5"
 constraintlayoutCompose = "1.0.1"
 lifecycleViewmodelCompose = "2.7.0"
 navigationCompose = "2.7.7"
 playServicesTagmanager = "18.0.4"
-runtimeLivedata = "1.6.4"
-material-icons = "1.6.4"
+runtimeLivedata = "1.6.5"
+material-icons = "1.6.5"
 lottie = "6.3.0"
 room = "2.6.1"
 kspVersion= "1.9.23-1.0.19"
@@ -26,6 +26,7 @@ hiltVersion = "2.49"
 hiltNavigationCompose = "1.2.0"
 playServicesAuth = "21.0.0"
 firebaseAuth = "22.3.1"
+toastmagic = "0.1"
 
 
 [libraries]
@@ -61,6 +62,8 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 googleFonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "fonts" }
 materialIcons ={ group = "androidx.compose.material", name = "material-icons-extended", version.ref = "material-icons" }
 lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
+toast-magic = { module = "com.github.jasi05072001:ToastMagic", version.ref = "toastmagic" }
+
 
 #constraint layout
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
@@ -82,10 +85,10 @@ firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
 firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
+play-services-tagmanager = { module = "com.google.android.gms:play-services-tagmanager", version.ref = "playServicesTagmanager" }
 
 
 #room
-play-services-tagmanager = { module = "com.google.android.gms:play-services-tagmanager", version.ref = "playServicesTagmanager" }
 room = { module = "androidx.room:room-runtime", version.ref = "room" }
 roomCompiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 roomKtx = { module = "androidx.room:room-ktx", version.ref = "room" }

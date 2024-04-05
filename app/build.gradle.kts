@@ -93,6 +93,8 @@ dependencies {
     implementation(libs.androidx.material3.window.size)
     implementation (libs.firebase.analytics.ktx)
     implementation(libs.play.services.tagmanager)
+    implementation(libs.toast.magic)
+
 
 
     ksp(libs.hiltCompiler)

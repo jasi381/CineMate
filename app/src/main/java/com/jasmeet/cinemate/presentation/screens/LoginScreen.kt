@@ -1,5 +1,6 @@
-package com.jasmeet.cinemate.presentation
+package com.jasmeet.cinemate.presentation.screens
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -9,19 +10,15 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imeNestedScroll
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -30,6 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -40,25 +38,34 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
+import com.jasmeet.cinemate.R
 import com.jasmeet.cinemate.presentation.appComponents.CustomTab
 import com.jasmeet.cinemate.presentation.appComponents.ImageRow
 import com.jasmeet.cinemate.presentation.appComponents.LoadingButton
 import com.jasmeet.cinemate.presentation.appComponents.PasswordFieldComponent
 import com.jasmeet.cinemate.presentation.appComponents.TextComponent
 import com.jasmeet.cinemate.presentation.appComponents.TextFieldComponent
+import com.jasmeet.cinemate.presentation.theme.customShapeAllCorners
 import com.jasmeet.cinemate.presentation.theme.customShapeBottomCorners
 import com.jasmeet.cinemate.presentation.theme.customShapeTopCorners
 import com.jasmeet.cinemate.presentation.theme.libreBaskerville
+import com.jasmeet.cinemate.presentation.utils.Utils
 import com.jasmeet.cinemate.presentation.viewModel.SignInViewModel
-import kotlin.math.sign
+import com.jasmeet.customtoast.utils.Utils.CustomToast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -83,7 +90,7 @@ fun LoginScreen(
 
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
-
+    val height = LocalConfiguration.current.screenHeightDp.dp
 
 
     ConstraintLayout(
@@ -112,7 +119,7 @@ fun LoginScreen(
             Modifier
                 .fillMaxWidth(.85f)
                 .constrainAs(loginSlider) {
-                    bottom.linkTo(imgLayout.bottom, margin = (45).dp)
+                    bottom.linkTo(imgLayout.bottom, margin = height * 0.08f)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }
@@ -171,12 +178,21 @@ fun LoginScreen(
                 shape = customShapeBottomCorners
             ) {
                 when (targetTabIndex) {
-                    0 -> LoginUi(focusManager = focusManager, keyboardController = keyboardController)
-                    1 -> SignupUi(focusManager = focusManager, keyboardController = keyboardController)
+                    0 -> LoginUi(
+                        focusManager = focusManager,
+                        keyboardController = keyboardController,
+                        navController = navController
+                    )
+                    1 -> SignupUi(
+                        focusManager = focusManager,
+                        keyboardController = keyboardController,
+                        navController = navController
+                    )
 
                 }
             }
         }
+
     }
 
 }
@@ -279,13 +295,35 @@ private fun calculateAlpha(index: Int, totalImages: Int): Float {
 }
 
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun LoginUi(keyboardController: SoftwareKeyboardController?, focusManager: FocusManager) {
+fun LoginUi(
+    keyboardController: SoftwareKeyboardController?,
+    focusManager: FocusManager,
+    signInViewModel: SignInViewModel = hiltViewModel(),
+    navController: NavHostController
+) {
 
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
-    var loading by rememberSaveable { mutableStateOf(false) }
+    val loading by signInViewModel.isLoading.collectAsState()
+
+    val errorMessage by signInViewModel.errorState.collectAsState()
+    val coroutine = rememberCoroutineScope()
+
+    if (errorMessage != null && errorMessage?.isNotEmpty() == true) {
+        CustomToast(
+            message = errorMessage ?: "Something went wrong !",
+            iconColor = Color.White,
+            textColor = Color.White,
+            icon = painterResource(id = R.drawable.ic_error),
+            backgroundColor = Color(0xfff44336),
+            fontFamily = libreBaskerville,
+            textSize = 14.sp,
+            duration = Toast.LENGTH_SHORT,
+            shape = customShapeAllCorners
+        )
+    }
+
 
 
     Column(
@@ -294,9 +332,8 @@ fun LoginUi(keyboardController: SoftwareKeyboardController?, focusManager: Focus
             .wrapContentHeight()
             .background(Color(0xff212121))
             .padding(horizontal = 5.dp)
-            .imeNestedScroll()
-    ) {
 
+    ) {
 
         TextComponent(
             text = "Email",
@@ -317,6 +354,7 @@ fun LoginUi(keyboardController: SoftwareKeyboardController?, focusManager: Focus
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 10.dp, end = 10.dp, bottom = 15.dp),
+            keyboardType = KeyboardType.Email
         )
 
 
@@ -343,13 +381,16 @@ fun LoginUi(keyboardController: SoftwareKeyboardController?, focusManager: Focus
                 onDone = {
                     keyboardController?.hide()
                     focusManager.clearFocus()
-                    loading = true
+                    validateAndInitiateSignIn(email, password, signInViewModel, coroutine, navController)
+
                 }
             )
         )
 
         LoadingButton(
-            onClick = { loading = true },
+            onClick = {
+                validateAndInitiateSignIn(email, password, signInViewModel, coroutine, navController)
+            },
             loading = loading,
             text = "Login",
             modifier = Modifier
@@ -364,17 +405,72 @@ fun LoginUi(keyboardController: SoftwareKeyboardController?, focusManager: Focus
 
 }
 
+private fun validateAndInitiateSignIn(
+    email: String,
+    password: String,
+    signInViewModel: SignInViewModel,
+    coroutine: CoroutineScope,
+    navController: NavHostController
+) {
+    if (Utils.validateEmail(email) && Utils.validatePassword(password)) {
+        signInViewModel.loginWithEmailPassword(email, password)
+        initiateSignInFlow(coroutine, signInViewModel, navController)
+    } else if (email.isEmpty()) {
+        signInViewModel.setErrorMessage("Email is Empty")
+    } else if (password.isEmpty()) {
+        signInViewModel.setErrorMessage("Password is Empty")
+    } else if (!Utils.validateEmail(email)) {
+        signInViewModel.setErrorMessage("Invalid Email! Please enter a valid email")
+    } else if (!Utils.validatePassword(password)) {
+        signInViewModel.setErrorMessage("Invalid Password! Please enter a valid password")
+    }
+}
+
+private fun initiateSignInFlow(
+    coroutine: CoroutineScope,
+    signInViewModel: SignInViewModel,
+    navController: NavHostController
+) {
+    coroutine.launch {
+        signInViewModel.stateFlow.collect {
+            if (it) {
+                val navOptions = NavOptions.Builder()
+                    .setPopUpTo(Screens.Login.route, inclusive = true)
+                    .build()
+                navController.navigate(Screens.Home.route, navOptions)
+            }
+        }
+
+    }
+}
+
+
 @Composable
 fun SignupUi(
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
-    signInViewModel: SignInViewModel = hiltViewModel()
+    signInViewModel: SignInViewModel = hiltViewModel(),
+    navController: NavHostController
 ) {
 
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     val loading by signInViewModel.isLoading.collectAsState()
-    val state by signInViewModel.stateFlow.collectAsState()
+    val errorMessage by signInViewModel.errorState.collectAsState()
+    val coroutine = rememberCoroutineScope()
+
+    if (errorMessage != null && errorMessage?.isNotEmpty() == true) {
+        CustomToast(
+            message = errorMessage ?: "Something went wrong !",
+            iconColor = Color.White,
+            textColor = Color.White,
+            icon = painterResource(id = R.drawable.ic_error),
+            backgroundColor = Color(0xfff44336),
+            fontFamily = libreBaskerville,
+            textSize = 14.sp,
+            duration = Toast.LENGTH_SHORT
+        )
+    }
 
 
     Column(
@@ -383,7 +479,6 @@ fun SignupUi(
             .wrapContentHeight()
             .background(Color(0xff212121))
             .padding(horizontal = 5.dp)
-            .verticalScroll(rememberScrollState())
 
     ) {
         TextComponent(
@@ -397,6 +492,7 @@ fun SignupUi(
             value = email,
             onValueChange = {
                 email = it
+
             },
             labelValue = "Enter your email",
             fontSize = 15.sp,
@@ -405,6 +501,7 @@ fun SignupUi(
                 .padding(start = 10.dp, end = 10.dp, bottom = 15.dp),
             enabled = !loading,
             readyOnly = loading,
+            keyboardType = KeyboardType.Email
         )
 
 
@@ -431,29 +528,64 @@ fun SignupUi(
                 onDone = {
                     keyboardController?.hide()
                     focusManager.clearFocus()
-                    signInViewModel.signUpEmailPassword(email, password)
+                    validateAndInitiateSignup(email, password, signInViewModel, coroutine, navController)
                 }
             )
         )
 
         LoadingButton(
-            onClick = { signInViewModel.signUpEmailPassword(email, password)
-               },
+            onClick = {
+                validateAndInitiateSignup(email, password, signInViewModel, coroutine, navController)
+            },
             loading = loading,
             text = "SignUp",
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp),
-            )
+        )
 
         Spacer(modifier = Modifier.height(15.dp))
-
-        if (state ){
-            email = ""
-            password = ""
-
-            //TODO :Implement success state
-        }
     }
 
 }
+
+private fun validateAndInitiateSignup(
+    email: String,
+    password: String,
+    signInViewModel: SignInViewModel,
+    coroutine: CoroutineScope,
+    navController: NavHostController
+) {
+    if (Utils.validateEmail(email) && Utils.validatePassword(password)) {
+        signInViewModel.signUpEmailPassword(email, password)
+        initiateSignUpFlow(coroutine, signInViewModel, navController)
+    } else if (email.isEmpty()) {
+        signInViewModel.setErrorMessage("Email is Empty")
+    } else if (password.isEmpty()) {
+        signInViewModel.setErrorMessage("Password is Empty")
+    } else if (!Utils.validateEmail(email)) {
+        signInViewModel.setErrorMessage("Invalid Email! Please enter a valid email")
+    } else if (!Utils.validatePassword(password)) {
+        signInViewModel.setErrorMessage("Invalid Password! Please enter a valid password")
+    }
+}
+
+private fun initiateSignUpFlow(
+    coroutine: CoroutineScope,
+    signInViewModel: SignInViewModel,
+    navController: NavHostController
+) {
+    coroutine.launch {
+        signInViewModel.stateFlow.collect {
+            if (it) {
+                val navOptions = NavOptions.Builder()
+                    .setPopUpTo(Screens.Login.route, inclusive = true)
+                    .build()
+                navController.navigate(Screens.Home.route, navOptions)
+            }
+        }
+
+    }
+}
+
+

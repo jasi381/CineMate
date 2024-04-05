@@ -2,20 +2,29 @@ package com.jasmeet.cinemate.presentation.appComponents
 
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
+import com.jasmeet.cinemate.R
 import com.jasmeet.cinemate.presentation.theme.customShapeAllCorners
 import com.jasmeet.cinemate.presentation.theme.libreBaskerville
 
@@ -100,6 +109,11 @@ fun PasswordFieldComponent(
     enabled : Boolean = true,
 
 ) {
+
+    val passwordVisible = remember {
+        mutableStateOf(false)
+    }
+
     OutlinedTextField(
 
         value = value,
@@ -142,7 +156,37 @@ fun PasswordFieldComponent(
             fontSize = fontSize,
             color = Color.White,
         ),
-        enabled = enabled
+        enabled = enabled,
+        trailingIcon = {
+
+            val iconImage =
+                if (passwordVisible.value)
+                   R.drawable.ic_show
+                else
+                    R.drawable.ic_hide
+
+            val description = if (passwordVisible.value)
+                "Hide Password"
+            else
+                "Show Password"
+
+            IconButton(
+                onClick ={
+                    passwordVisible.value = !passwordVisible.value}
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = iconImage),
+                    contentDescription = description,
+                    tint = Color(0xffFFFFFF).copy(0.85f),
+                )
+            }
+        },
+        visualTransformation =
+        if (passwordVisible.value)
+            VisualTransformation.None
+        else
+            PasswordVisualTransformation('●'),
+
 
     )
 
