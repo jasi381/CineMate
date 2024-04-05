@@ -64,7 +64,6 @@ materialIcons ={ group = "androidx.compose.material", name = "material-icons-ext
 lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
 toast-magic = { module = "com.github.jasi05072001:ToastMagic", version.ref = "toastmagic" }
 
-
 #constraint layout
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 

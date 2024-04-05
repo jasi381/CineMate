@@ -27,18 +27,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import com.jasmeet.cinemate.R
 import com.jasmeet.cinemate.presentation.appComponents.LottieComponent
 import com.jasmeet.cinemate.presentation.theme.libreBaskerville
+import com.jasmeet.cinemate.presentation.viewModel.SplashViewModel
 import kotlinx.coroutines.delay
 
 
 @Composable
 fun SplashScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    splashViewModel: SplashViewModel = hiltViewModel()
 ) {
+
+    val isUserLoggedIn = splashViewModel.isUserLoggedIn
+
     val transition = rememberInfiniteTransition(label = "")
     val color by transition.animateColor(
         initialValue = Color.White,
@@ -84,12 +90,23 @@ fun SplashScreen(
         ), label = ""
     )
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(true) {
+        splashViewModel.checkForActiveSession()
         delay(3200)
-        val navOptions = NavOptions.Builder()
-            .setPopUpTo(Screens.Splash.route, inclusive = true)
-            .build()
-        navController.navigate(Screens.Login.route, navOptions)
+
+        if (isUserLoggedIn.value == true) {
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(Screens.Splash.route, inclusive = true)
+                .build()
+            navController.navigate(Screens.Home.route, navOptions)
+
+        }else{
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(Screens.Splash.route, inclusive = true)
+                .build()
+            navController.navigate(Screens.Login.route, navOptions)
+
+        }
     }
 
     Column(
@@ -110,7 +127,7 @@ fun SplashScreen(
             color = color,
             fontFamily = libreBaskerville,
             modifier = Modifier
-                .offset( y = (-50).dp)
+                .offset(y = (-50).dp)
                 .fillMaxWidth()
                 .alpha(alpha)
                 .graphicsLayer(
