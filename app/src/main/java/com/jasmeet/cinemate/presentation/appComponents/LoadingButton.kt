@@ -28,11 +28,12 @@ fun LoadingButton(
     shape: Shape = customShapeAllCorners,
     backgroundColor: Color = Color(0xffE50914),
     textColor: Color = Color.White,
-    text: String,
+    text: String ?= null,
     fontFamily: FontFamily = libreBaskerville,
     modifier: Modifier,
     textSize: TextUnit = 18.sp,
-    fontWeight: FontWeight = FontWeight.SemiBold
+    fontWeight: FontWeight = FontWeight.SemiBold,
+    content: @Composable () -> Unit ={}
 ) {
     Button(
         onClick = onClick,
@@ -60,13 +61,17 @@ fun LoadingButton(
         AnimatedVisibility(
             visible = !loading,
         ) {
-            Text(
-                text = text,
-                fontFamily = fontFamily,
-                fontSize = textSize,
-                modifier = Modifier.padding(vertical = 3.5.dp),
-                fontWeight = fontWeight
-            )
+            if (text != null) {
+                Text(
+                    text = text,
+                    fontFamily = fontFamily,
+                    fontSize = textSize,
+                    modifier = Modifier.padding(vertical = 3.5.dp),
+                    fontWeight = fontWeight
+                )
+            }else{
+                content()
+            }
         }
 
     }

@@ -1,5 +1,6 @@
 package com.jasmeet.cinemate.presentation.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
@@ -8,7 +9,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,9 +20,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -27,6 +33,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -39,10 +46,13 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,19 +60,24 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.jasmeet.cinemate.R
 import com.jasmeet.cinemate.presentation.appComponents.CustomTab
 import com.jasmeet.cinemate.presentation.appComponents.ImageRow
 import com.jasmeet.cinemate.presentation.appComponents.LoadingButton
+import com.jasmeet.cinemate.presentation.appComponents.OrDivider
 import com.jasmeet.cinemate.presentation.appComponents.PasswordFieldComponent
 import com.jasmeet.cinemate.presentation.appComponents.TextComponent
 import com.jasmeet.cinemate.presentation.appComponents.TextFieldComponent
+import com.jasmeet.cinemate.presentation.authLauncher.rememberFirebaseAuthLauncher
 import com.jasmeet.cinemate.presentation.theme.customShapeAllCorners
 import com.jasmeet.cinemate.presentation.theme.customShapeBottomCorners
 import com.jasmeet.cinemate.presentation.theme.customShapeTopCorners
 import com.jasmeet.cinemate.presentation.theme.libreBaskerville
 import com.jasmeet.cinemate.presentation.utils.Utils
 import com.jasmeet.cinemate.presentation.viewModel.SignInViewModel
+import com.jasmeet.customtoast.main.ToastMagic
 import com.jasmeet.customtoast.utils.Utils.CustomToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -71,12 +86,55 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
     navController: NavHostController,
-    windowSize: WindowSizeClass
+    windowSize: WindowSizeClass,
+    signInViewModel: SignInViewModel = hiltViewModel()
 ) {
+
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val context = LocalContext.current
+
+    val height = LocalConfiguration.current.screenHeightDp.dp
+
+
+    val token = stringResource(R.string.default_web_client_id)
+    val gso = remember {
+        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(token)
+            .requestEmail()
+            .requestProfile()
+            .build()
+    }
+
+    val googleSignInClient = remember {
+        GoogleSignIn.getClient(context, gso)
+    }
     val tabs = listOf("Login", "Signup")
     var selectedTabIndex by rememberSaveable {
         mutableIntStateOf(0)
     }
+
+    var googleLoading by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    val errorMessage by signInViewModel.errorState.collectAsState()
+
+    if (errorMessage != null && errorMessage?.isNotEmpty() == true) {
+        CustomToast(
+            message = errorMessage ?: "Something went wrong !",
+            iconColor = Color.White,
+            textColor = Color.White,
+            icon = painterResource(id = R.drawable.ic_error),
+            backgroundColor = Color(0xfff44336),
+            fontFamily = libreBaskerville,
+            textSize = 14.sp,
+            duration = Toast.LENGTH_SHORT,
+            shape = customShapeAllCorners
+        )
+    }
+
+
     BackHandler {
         if (selectedTabIndex ==1 ) {
             selectedTabIndex = 0
@@ -88,20 +146,37 @@ fun LoginScreen(
 
     }
 
-    val focusManager = LocalFocusManager.current
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val height = LocalConfiguration.current.screenHeightDp.dp
+    val launcher = rememberFirebaseAuthLauncher(
+        onAuthComplete = {result ->
+            googleLoading = false
+            signInViewModel.saveData(result)
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(Screens.Login.route,inclusive = true)
+                .build()
+
+            navController.navigate(Screens.Home.route,navOptions)
+
+
+        },
+        onAuthError = { error ->
+            googleLoading = false
+            error.let {
+                signInViewModel.setErrorMessage(it)
+            }
+
+        }
+    )
+
+
 
 
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Color(0xff131313)
-            )
+            .background(Color(0xff131313))
     ) {
 
-        val (imgLayout, loginSlider, loginLayout) = createRefs()
+        val (imgLayout, loginSlider, loginLayout,dashedDivider,googleBtn) = createRefs()
 
         ImageLayout(
             modifier = Modifier
@@ -110,10 +185,9 @@ fun LoginScreen(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 },
-            windowSize = windowSize
+            windowSize = windowSize,
+            signInViewModel = signInViewModel
         )
-
-
 
         Row(
             Modifier
@@ -142,9 +216,6 @@ fun LoginScreen(
             }
 
         }
-
-
-
 
         AnimatedContent(
             targetState = selectedTabIndex,
@@ -181,17 +252,74 @@ fun LoginScreen(
                     0 -> LoginUi(
                         focusManager = focusManager,
                         keyboardController = keyboardController,
-                        navController = navController
+                        navController = navController,
+                        signInViewModel = signInViewModel
+
                     )
                     1 -> SignupUi(
                         focusManager = focusManager,
                         keyboardController = keyboardController,
-                        navController = navController
+                        navController = navController,
+                        signInViewModel = signInViewModel
+
                     )
 
                 }
             }
         }
+        OrDivider(
+
+            modifier = Modifier
+                .fillMaxWidth(0.85f)
+                .constrainAs(dashedDivider) {
+                    top.linkTo(loginLayout.bottom, margin = 20.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+        )
+        LoadingButton(
+            onClick = {
+                googleLoading = true
+                launcher.launch(googleSignInClient.signInIntent)
+            },
+            loading = googleLoading,
+            modifier = Modifier
+                .padding(horizontal = 10.dp)
+                .fillMaxWidth(0.85f)
+                .constrainAs(googleBtn) {
+                    top.linkTo(dashedDivider.bottom, margin = 25.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                },
+            backgroundColor = Color.White,
+            textColor = Color.Black,
+            content = {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 3.2.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_google),
+                        contentDescription = "Google",
+                        modifier = Modifier.size(25.dp)
+                    )
+                    Spacer(modifier = Modifier.width(15.dp))
+                    Text(
+                        text = "Continue with Google",
+                        fontFamily = libreBaskerville,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+
+
+                }
+            }
+        )
+
+
 
     }
 
@@ -202,7 +330,7 @@ fun LoginScreen(
 private fun ImageLayout(
     modifier: Modifier,
     windowSize: WindowSizeClass,
-    signInViewModel: SignInViewModel = hiltViewModel()
+    signInViewModel: SignInViewModel
 ) {
 
 
@@ -299,8 +427,8 @@ private fun calculateAlpha(index: Int, totalImages: Int): Float {
 fun LoginUi(
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
-    signInViewModel: SignInViewModel = hiltViewModel(),
-    navController: NavHostController
+    navController: NavHostController,
+    signInViewModel: SignInViewModel
 ) {
 
     var email by rememberSaveable { mutableStateOf("") }
@@ -449,8 +577,8 @@ private fun initiateSignInFlow(
 fun SignupUi(
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
-    signInViewModel: SignInViewModel = hiltViewModel(),
-    navController: NavHostController
+    navController: NavHostController,
+    signInViewModel: SignInViewModel
 ) {
 
     var email by rememberSaveable { mutableStateOf("") }

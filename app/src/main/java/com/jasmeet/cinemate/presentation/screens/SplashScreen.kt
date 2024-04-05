@@ -136,7 +136,6 @@ fun SplashScreen(
                 )
                 .animateContentSize(),
             fontSize = fontSize.sp,
-            overflow = TextOverflow.Clip,
             textAlign = TextAlign.Center
         )
     }

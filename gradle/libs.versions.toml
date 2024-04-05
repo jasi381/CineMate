@@ -27,6 +27,7 @@ hiltNavigationCompose = "1.2.0"
 playServicesAuth = "21.0.0"
 firebaseAuth = "22.3.1"
 toastmagic = "0.1"
+googleServices = "4.4.1"
 
 
 [libraries]
@@ -85,7 +86,7 @@ play-services-auth = { module = "com.google.android.gms:play-services-auth", ver
 firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
 firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
 play-services-tagmanager = { module = "com.google.android.gms:play-services-tagmanager", version.ref = "playServicesTagmanager" }
-
+google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
 
 #room
 room = { module = "androidx.room:room-runtime", version.ref = "room" }

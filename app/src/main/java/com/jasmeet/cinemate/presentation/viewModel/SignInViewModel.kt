@@ -156,6 +156,22 @@ class SignInViewModel @Inject constructor (
             }
         }
     }
+    fun saveData(authResult: AuthResult){
+        viewModelScope.launch {
+            try {
+                _isLoading.value = true
+                userRepository.saveUserDataToFirestore(authResult)
+                _isLoading.value = false
+                state.value = true
+
+            }catch (e:Exception){
+                setErrorMessage(e.message)
+                _isLoading.value = false
+                state.value = false
+            }
+
+        }
+    }
 
 
     override fun onCleared() {

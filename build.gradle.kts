@@ -6,3 +6,8 @@ plugins {
     alias(libs.plugins.hiltAndroid) apply false
     alias(libs.plugins.kotlinKsp) apply false
 }
+buildscript {
+    dependencies {
+        classpath(libs.google.services)
+    }
+}

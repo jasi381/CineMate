@@ -25,7 +25,7 @@ class UserRepositoryImpl(
 
         db.collection("users").document(user.uid).set(
             UserInfo(
-                name = user.email.toString().substringBefore("@"),
+                name = user.displayName ?:user.email.toString().substringBefore("@"),
                 email = user.email,
                 uid = user.uid,
                 imgUrl = if (user.photoUrl != null) user.photoUrl.toString() else "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
