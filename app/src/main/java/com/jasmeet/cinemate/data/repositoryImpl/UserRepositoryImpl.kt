@@ -1,15 +1,16 @@
-package com.jasmeet.cinemate.domain
+package com.jasmeet.cinemate.data.repositoryImpl
 
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jasmeet.cinemate.data.data.UserInfo
+import com.jasmeet.cinemate.data.repository.UserRepository
 import kotlinx.coroutines.tasks.await
 
 class UserRepositoryImpl(
     private val auth :FirebaseAuth,
     private val db : FirebaseFirestore
-) :UserRepository{
+) : UserRepository {
 
 
     override suspend fun loginWithEmailAndPassword(email: String, password: String): AuthResult {

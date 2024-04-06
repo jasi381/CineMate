@@ -1,4 +1,4 @@
-package com.jasmeet.cinemate.domain
+package com.jasmeet.cinemate.data.repository
 
 import com.google.firebase.auth.AuthResult
 

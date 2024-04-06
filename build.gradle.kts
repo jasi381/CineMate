@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.gmsService) apply false
     alias(libs.plugins.hiltAndroid) apply false
     alias(libs.plugins.kotlinKsp) apply false
+    alias(libs.plugins.secrets.plugin) apply false
 }
 buildscript {
     dependencies {

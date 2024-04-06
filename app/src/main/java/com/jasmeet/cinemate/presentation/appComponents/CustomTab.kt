@@ -2,7 +2,11 @@ package com.jasmeet.cinemate.presentation.appComponents
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.clickable
@@ -125,7 +129,7 @@ fun RowScope.CustomTab2(
         } else {
             Color.White.copy(alpha = 0.5f)
         },
-        animationSpec = tween(500, 0, LinearEasing),
+        animationSpec = spring(),
         label = "Text Color",
     )
 
@@ -155,25 +159,19 @@ fun RowScope.CustomTab2(
         androidx.compose.animation.AnimatedVisibility(
             visible = isSelected,
             modifier = Modifier,
-            enter = slideInHorizontally(
-                initialOffsetX = {
-                    if (index == 0) {
-                        it
-                    } else {
-                        -it
-                    }
-                },
-                animationSpec = tween(500, 0, LinearEasing)
+            enter = fadeIn(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessMedium,
+                    visibilityThreshold = 0.1f,
+                )
             ),
-            exit = slideOutHorizontally(
-                targetOffsetX = {
-                    if (index == 0) {
-                        it
-                    } else {
-                        -it
-                    }
-                },
-                animationSpec = tween(500, 0, LinearEasing)
+            exit = fadeOut(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessMedium,
+                    visibilityThreshold = 0.1f,
+                )
 
             )
 

@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.gmsService)
     alias(libs.plugins.kotlinKsp)
     alias(libs.plugins.hiltAndroid)
+    alias(libs.plugins.secrets.plugin)
 }
 
 android {
@@ -42,6 +43,7 @@ android {
             )
             signingConfig = signingConfigs.getByName("release")
             multiDexEnabled = true
+            isDebuggable = true
         }
     }
     compileOptions {
@@ -53,6 +55,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.11"
@@ -95,12 +98,16 @@ dependencies {
     implementation(libs.play.services.tagmanager)
     implementation(libs.toast.magic)
     implementation (libs.landscapist.bom)
-
-    // Import landscapist libraries
     implementation (libs.landscapist.coil)
     implementation (libs.landscapist.placeholder)
     implementation (libs.landscapist.animation)
-
+    implementation(libs.logging.interceptor)
+    implementation(libs.retrofit)
+    implementation(libs.moshi.kotlin)
+    implementation(libs.retrofit)
+    implementation(libs.converter.moshi)
+    implementation (libs.androidx.paging.runtime.ktx)
+    implementation (libs.androidx.paging.compose)
 
 
 
