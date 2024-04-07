@@ -36,7 +36,7 @@ fun CineMateNavigator(
     NavHost(
         navController = navController,
         startDestination = Screens.Splash.route,
-        modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())
+        modifier = Modifier.background(Color(0xff131313)).fillMaxSize().padding(bottom = paddingValues.calculateBottomPadding())
     ) {
 
         composable(

@@ -4,7 +4,6 @@ import android.content.Context
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.jasmeet.cinemate.BuildConfig
 import com.jasmeet.cinemate.data.apiService.ApiService
 import com.jasmeet.cinemate.data.repository.PopularMoviesRepository
 import com.jasmeet.cinemate.data.repository.UserRepository
@@ -18,7 +17,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -67,17 +65,9 @@ object AppModule {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
 
         val okHttpClient = OkHttpClient.Builder()
-            .connectTimeout(1, TimeUnit.MINUTES)
+            .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(1, TimeUnit.MINUTES)
             .writeTimeout(1, TimeUnit.MINUTES)
-            .addInterceptor(
-                Interceptor { chain->
-                    val builder = chain.request().newBuilder()
-                    builder.header("accept", "application/json")
-                    builder.header("Authorization", "Bearer ${BuildConfig.bearerToken} ")
-                    return@Interceptor chain.proceed(builder.build())
-                }
-            )
             .addInterceptor(loggingInterceptor)
             .build()
 
@@ -85,6 +75,7 @@ object AppModule {
             .baseUrl(ApiService.BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .client(okHttpClient)
+
             .build()
             .create(ApiService::class.java)
     }
