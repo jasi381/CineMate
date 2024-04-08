@@ -1,16 +1,14 @@
-package com.jasmeet.cinemate.data.data.pagingSource
+package com.jasmeet.cinemate.data.pagingSource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.jasmeet.cinemate.data.data.apiResponse.remote.PopularMoviesResponse
-import com.jasmeet.cinemate.data.data.apiResponse.remote.Result
-import com.jasmeet.cinemate.data.repository.PopularMoviesRepository
+import com.jasmeet.cinemate.data.data.apiResponse.remote.movies.nowPlaying.Result
+import com.jasmeet.cinemate.data.repository.NowPlayingMoviesRepository
 import retrofit2.HttpException
-import java.io.IOException
 import javax.inject.Inject
 
-class PopularMoviesPagingSource @Inject constructor(
-    private val popularMoviesRepository: PopularMoviesRepository
+class NowPlayingMoviesPagingSource @Inject constructor(
+    private val nowPlayingMoviesRepository: NowPlayingMoviesRepository
 ) : PagingSource<Int, Result>(){
 
     override fun getRefreshKey(state: PagingState<Int, Result>): Int? {
@@ -20,7 +18,7 @@ class PopularMoviesPagingSource @Inject constructor(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Result> {
         val page = params.key ?: 1
 
-        val response = popularMoviesRepository.getPopularMovies(
+        val response = nowPlayingMoviesRepository.getNowPlayingMovies(
             page = page
         )
 
@@ -31,11 +29,7 @@ class PopularMoviesPagingSource @Inject constructor(
                 nextKey = if (response.results.isEmpty()) null else page.plus(1)
             )
 
-        }catch (e: IOException) {
-            LoadResult.Error(
-                e
-            )
-        } catch (e: HttpException) {
+        }catch (e: HttpException) {
             LoadResult.Error(
                 e
             )

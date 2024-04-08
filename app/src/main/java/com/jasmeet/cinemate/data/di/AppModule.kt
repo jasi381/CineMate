@@ -5,10 +5,13 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jasmeet.cinemate.data.apiService.ApiService
+import com.jasmeet.cinemate.data.repository.NowPlayingMoviesRepository
 import com.jasmeet.cinemate.data.repository.PopularMoviesRepository
 import com.jasmeet.cinemate.data.repository.UserRepository
+import com.jasmeet.cinemate.data.repositoryImpl.NowPlayingRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.PopularMoviesImpl
 import com.jasmeet.cinemate.data.repositoryImpl.UserRepositoryImpl
+import com.jasmeet.cinemate.domain.useCase.NowPlayingMoviesUseCase
 import com.jasmeet.cinemate.domain.useCase.PopularMoviesUseCase
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -89,6 +92,17 @@ object AppModule {
     @Singleton
     fun providesPopularMoviesUseCase(repository: PopularMoviesRepository): PopularMoviesUseCase =
         PopularMoviesUseCase(repository)
+
+
+    @Provides
+    @Singleton
+    fun providesNowPlayingMoviesRepository(apiService: ApiService): NowPlayingMoviesRepository =
+        NowPlayingRepositoryImpl(apiService)
+
+    @Provides
+    @Singleton
+    fun providesNowPlayingMoviesUseCase(repository: NowPlayingMoviesRepository): NowPlayingMoviesUseCase =
+        NowPlayingMoviesUseCase(repository)
 }
 
 

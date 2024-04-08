@@ -10,4 +10,18 @@ object Utils {
     fun validatePassword(password: String): Boolean {
         return password.length >= 8
     }
+
+    fun getImageLinkWithSize(imgPath :String , size :ImgSize):String{
+
+        return "https://image.tmdb.org/t/p/$size/$imgPath"
+
+    }
+}
+
+
+enum class ImgSize{
+    w300,
+    w780,
+    w1280,
+    original
 }

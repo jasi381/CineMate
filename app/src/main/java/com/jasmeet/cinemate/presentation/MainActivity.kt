@@ -80,6 +80,7 @@ class MainActivity : ComponentActivity() {
             CineMateTheme {
                 val windowSize = calculateWindowSizeClass(activity = this)
                 CineMateApp(windowSize = windowSize)
+
             }
         }
     }
@@ -121,6 +122,16 @@ fun CineMateApp(
                 super.onCapabilitiesChanged(network, networkCapabilities)
                 showNetworkDialog =
                     !networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+            }
+
+            override fun onLost(network: Network) {
+                super.onLost(network)
+                showNetworkDialog = true
+            }
+
+            override fun onUnavailable() {
+                super.onUnavailable()
+                showNetworkDialog = true
             }
         }
         connectivityManager.registerDefaultNetworkCallback(networkCallback)
@@ -183,7 +194,8 @@ fun NetworkConnectionDialog2() {
                     firstPressed = false
                 }
             }
-        }) {
+        }
+    ) {
         Surface(
             modifier = Modifier.padding(16.dp),
             shape = MaterialTheme.shapes.medium,
@@ -259,6 +271,7 @@ fun NetworkConnectionDialog2() {
         }
     }
 }
+
 
 
 
