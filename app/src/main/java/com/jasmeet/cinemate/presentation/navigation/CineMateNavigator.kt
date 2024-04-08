@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.jasmeet.cinemate.presentation.screens.HomeScreen
+import com.jasmeet.cinemate.presentation.screens.homeScreen.HomeScreen
 import com.jasmeet.cinemate.presentation.screens.LoginScreen
 import com.jasmeet.cinemate.presentation.screens.Screens
 import com.jasmeet.cinemate.presentation.screens.SearchScreen

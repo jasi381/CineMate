@@ -11,7 +11,10 @@ object Utils {
         return password.length >= 8
     }
 
-    fun getImageLinkWithSize(imgPath :String , size :ImgSize):String{
+    fun getImageLinkWithSize(imgPath :String? , size :ImgSize):String{
+
+        if(imgPath == null)
+            return "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg"
 
         return "https://image.tmdb.org/t/p/$size/$imgPath"
 

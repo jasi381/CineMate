@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
-import com.jasmeet.cinemate.data.data.BottomNavigationItem
+import com.jasmeet.cinemate.data.BottomNavigationItem
 import com.jasmeet.cinemate.presentation.screens.Screens
 import com.jasmeet.cinemate.presentation.theme.libreBaskerville
 

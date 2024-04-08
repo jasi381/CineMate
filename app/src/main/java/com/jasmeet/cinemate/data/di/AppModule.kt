@@ -7,12 +7,18 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.jasmeet.cinemate.data.apiService.ApiService
 import com.jasmeet.cinemate.data.repository.NowPlayingMoviesRepository
 import com.jasmeet.cinemate.data.repository.PopularMoviesRepository
+import com.jasmeet.cinemate.data.repository.TopRatedMoviesRepository
+import com.jasmeet.cinemate.data.repository.UpcomingMovieRepository
 import com.jasmeet.cinemate.data.repository.UserRepository
 import com.jasmeet.cinemate.data.repositoryImpl.NowPlayingRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.PopularMoviesImpl
+import com.jasmeet.cinemate.data.repositoryImpl.TopRatedMoviesImpl
+import com.jasmeet.cinemate.data.repositoryImpl.UpcomingMoviesRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.UserRepositoryImpl
-import com.jasmeet.cinemate.domain.useCase.NowPlayingMoviesUseCase
-import com.jasmeet.cinemate.domain.useCase.PopularMoviesUseCase
+import com.jasmeet.cinemate.domain.useCase.movies.NowPlayingMoviesUseCase
+import com.jasmeet.cinemate.domain.useCase.movies.PopularMoviesUseCase
+import com.jasmeet.cinemate.domain.useCase.movies.TopRatedMoviesUseCase
+import com.jasmeet.cinemate.domain.useCase.movies.UpcomingMovieUseCase
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -103,6 +109,27 @@ object AppModule {
     @Singleton
     fun providesNowPlayingMoviesUseCase(repository: NowPlayingMoviesRepository): NowPlayingMoviesUseCase =
         NowPlayingMoviesUseCase(repository)
+
+
+    @Provides
+    @Singleton
+    fun providesTopRatedMoviesRepository(apiService: ApiService): TopRatedMoviesRepository =
+        TopRatedMoviesImpl(apiService)
+
+    @Provides
+    @Singleton
+    fun providesTopRatedMoviesUseCase(repository: TopRatedMoviesRepository): TopRatedMoviesUseCase =
+        TopRatedMoviesUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun providesUpcomingMoviesRepository(apiService: ApiService): UpcomingMovieRepository =
+        UpcomingMoviesRepositoryImpl(apiService)
+
+    @Provides
+    @Singleton
+    fun providesUpcomingMoviesUseCase(repository: UpcomingMovieRepository): UpcomingMovieUseCase =
+        UpcomingMovieUseCase(repository)
 }
 
 

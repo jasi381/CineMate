@@ -1,4 +1,4 @@
-package com.jasmeet.cinemate.domain.useCase
+package com.jasmeet.cinemate.domain.useCase.movies
 
 import com.jasmeet.cinemate.data.repository.NowPlayingMoviesRepository
 

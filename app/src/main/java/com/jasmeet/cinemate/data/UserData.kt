@@ -1,4 +1,4 @@
-package com.jasmeet.cinemate.data.data
+package com.jasmeet.cinemate.data
 
 data class UserInfo(
     val name: String? = "",

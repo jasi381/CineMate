@@ -52,7 +52,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.jasmeet.cinemate.R
-import com.jasmeet.cinemate.data.data.BottomNavigationItem
+import com.jasmeet.cinemate.data.BottomNavigationItem
 import com.jasmeet.cinemate.presentation.appComponents.BottomBar
 import com.jasmeet.cinemate.presentation.appComponents.LottieComponent
 import com.jasmeet.cinemate.presentation.navigation.CineMateNavigator

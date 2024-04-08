@@ -1,4 +1,4 @@
-package com.jasmeet.cinemate.data.data.apiResponse.remote.movies.nowPlaying
+package com.jasmeet.cinemate.data.apiResponse.remote.movies.nowPlaying
 
 data class NowPlayingResponse(
     val dates: Dates,

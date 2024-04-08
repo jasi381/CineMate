@@ -1,4 +1,4 @@
-package com.jasmeet.cinemate.data.data.apiResponse.remote.movies.popular
+package com.jasmeet.cinemate.data.apiResponse.remote.movies.popular
 
 data class PopularMoviesResponse(
     val page: Int,

@@ -1,4 +1,4 @@
-package com.jasmeet.cinemate.data.data
+package com.jasmeet.cinemate.data
 
 import com.jasmeet.cinemate.R
 import com.jasmeet.cinemate.presentation.screens.Screens

@@ -71,6 +71,7 @@ import com.jasmeet.cinemate.presentation.appComponents.PasswordFieldComponent
 import com.jasmeet.cinemate.presentation.appComponents.TextComponent
 import com.jasmeet.cinemate.presentation.appComponents.TextFieldComponent
 import com.jasmeet.cinemate.presentation.authLauncher.rememberFirebaseAuthLauncher
+import com.jasmeet.cinemate.presentation.extensions.customClickable
 import com.jasmeet.cinemate.presentation.theme.customShapeAllCorners
 import com.jasmeet.cinemate.presentation.theme.customShapeBottomCorners
 import com.jasmeet.cinemate.presentation.theme.customShapeTopCorners
@@ -438,6 +439,8 @@ fun LoginUi(
     val errorMessage by signInViewModel.errorState.collectAsState()
     val coroutine = rememberCoroutineScope()
 
+    val context = LocalContext.current
+
     if (errorMessage != null && errorMessage?.isNotEmpty() == true) {
         CustomToast(
             message = errorMessage ?: "Something went wrong !",
@@ -504,7 +507,7 @@ fun LoginUi(
             labelValue = "Enter your password",
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 10.dp, end = 10.dp, bottom = 22.dp),
+                .padding(start = 10.dp, end = 10.dp, bottom = 15.dp),
             keyboardActions = KeyboardActions(
                 onDone = {
                     keyboardController?.hide()
@@ -513,6 +516,19 @@ fun LoginUi(
 
                 }
             )
+        )
+
+        TextComponent(
+            text = "Forgot Password?", modifier = Modifier
+            .align(Alignment.End)
+            .padding(bottom = 22.dp, end = 5.dp)
+            .customClickable {
+               //TODO
+            },
+            textColor = Color.White,
+            textSize = 15.sp,
+            fontWeight = FontWeight.Normal,
+            enableShadow = true
         )
 
         LoadingButton(

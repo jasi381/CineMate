@@ -3,7 +3,7 @@ package com.jasmeet.cinemate.data.repositoryImpl
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.jasmeet.cinemate.data.data.UserInfo
+import com.jasmeet.cinemate.data.UserInfo
 import com.jasmeet.cinemate.data.repository.UserRepository
 import kotlinx.coroutines.tasks.await
 
