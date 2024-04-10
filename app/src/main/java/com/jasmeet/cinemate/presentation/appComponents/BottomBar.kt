@@ -2,6 +2,13 @@ package com.jasmeet.cinemate.presentation.appComponents
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.EaseInExpo
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -9,6 +16,8 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -17,6 +26,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
@@ -54,6 +64,24 @@ fun RowScope.AddBottomNavItem(
 
     val isSelected = currentDestination?.route == screen.route
 
+    val selectedColor = remember { Color(0xffF2C94C) }
+    val unselectedColor = remember { Color.White }
+    val targetColor = if (isSelected) selectedColor else unselectedColor
+    val color by animateColorAsState(
+        targetValue = targetColor,
+        animationSpec = tween(easing = EaseInExpo ),
+        label = ""
+    )
+
+    val selectedTextSize = if (isSelected) 14.5.sp else 12.sp
+    val targetTextSize by animateFloatAsState(
+        targetValue = selectedTextSize.value,
+        animationSpec = tween(easing = EaseInExpo ),
+        label = ""
+    )
+
+
+
     BackHandler {
         if (currentDestination?.route == Screens.Home.route) {
             val activity = (context as? Activity)
@@ -86,15 +114,32 @@ fun RowScope.AddBottomNavItem(
             }
         },
         icon = {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = if (isSelected) screen.selectedIcon else screen.unselectedIcon),
-                contentDescription = "Icon",
-                tint = if (isSelected) {
-                    Color(0xffF2C94C)
-                } else {
-                    Color.White
-                },
-            )
+
+            AnimatedVisibility(
+                visible = isSelected,
+                enter = scaleIn(),
+                exit = scaleOut()
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id =  screen.selectedIcon ),
+                    contentDescription = "Icon",
+                    tint = color,
+                )
+            }
+
+            AnimatedVisibility(
+                visible = !isSelected,
+                enter = scaleIn(),
+                exit = scaleOut()
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = screen.unselectedIcon),
+                    contentDescription = "Icon",
+                    tint = color,
+                )
+
+            }
+
         },
         label = {
             Text(
@@ -102,12 +147,9 @@ fun RowScope.AddBottomNavItem(
                 style = TextStyle(
                     fontFamily = libreBaskerville,
                     fontWeight = FontWeight(500),
-                    color = if (currentDestination?.route == screen.route) {
-                        Color(0xffF2C94C)
-                    } else {
-                        Color.White
-                    },
+                    color = color,
                     textAlign = TextAlign.Center,
+                    fontSize = targetTextSize.sp
                 ),
             )
         }

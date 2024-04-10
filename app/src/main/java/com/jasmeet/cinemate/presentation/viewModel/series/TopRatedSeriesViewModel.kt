@@ -1,4 +1,4 @@
-package com.jasmeet.cinemate.presentation.viewModel.movies
+package com.jasmeet.cinemate.presentation.viewModel.series
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,26 +7,25 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
-import com.jasmeet.cinemate.data.apiResponse.remote.movies.upComing.Result
-import com.jasmeet.cinemate.data.pagingSource.movies.UpcomingMoviesPagingSource
-import com.jasmeet.cinemate.data.repository.movies.UpcomingMovieRepository
+import com.jasmeet.cinemate.data.apiResponse.remote.tvSeries.topRated.Result
+import com.jasmeet.cinemate.data.pagingSource.series.TopRatedSeriesPagingSource
+import com.jasmeet.cinemate.data.repository.series.TopRatedSeriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @HiltViewModel
-class UpcomingMoviesViewModel  @Inject constructor(
-    private val repository: UpcomingMovieRepository,
-): ViewModel(){
+class TopRatedSeriesViewModel @Inject constructor(
+    private val repository: TopRatedSeriesRepository
+): ViewModel() {
 
-    private val _upComingMovies: MutableStateFlow<PagingData<Result>> =
+    private val _topRatedSeries : MutableStateFlow<PagingData<Result>> =
         MutableStateFlow(PagingData.empty())
-    val upComingMovies = _upComingMovies.asStateFlow()
-
+    val topRatedSeries : MutableStateFlow<PagingData<Result>> = _topRatedSeries
 
     init {
         viewModelScope.launch {
@@ -35,7 +34,7 @@ class UpcomingMoviesViewModel  @Inject constructor(
                     pageSize = 70,
                     enablePlaceholders = true
                 ),
-                pagingSourceFactory = { UpcomingMoviesPagingSource(repository) }
+                pagingSourceFactory = { TopRatedSeriesPagingSource(repository) }
             ).flow
                 .cachedIn(viewModelScope)
                 .map { pagingData ->
@@ -43,9 +42,10 @@ class UpcomingMoviesViewModel  @Inject constructor(
                         result.backdrop_path != null
                     }
                 }
-                .collectLatest { filteredNowPlayingMovies ->
-                    _upComingMovies.value = filteredNowPlayingMovies
+                .collectLatest { filteredTopRatedSeries ->
+                    _topRatedSeries.value = filteredTopRatedSeries
                 }
         }
     }
+
 }

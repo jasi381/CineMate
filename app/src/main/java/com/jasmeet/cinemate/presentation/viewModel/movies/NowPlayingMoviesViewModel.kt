@@ -8,8 +8,8 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
 import com.jasmeet.cinemate.data.apiResponse.remote.movies.nowPlaying.Result
-import com.jasmeet.cinemate.data.pagingSource.NowPlayingMoviesPagingSource
-import com.jasmeet.cinemate.data.repository.NowPlayingMoviesRepository
+import com.jasmeet.cinemate.data.pagingSource.movies.NowPlayingMoviesPagingSource
+import com.jasmeet.cinemate.data.repository.movies.NowPlayingMoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

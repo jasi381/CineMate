@@ -1,6 +1,6 @@
 package com.jasmeet.cinemate.domain.useCase.movies
 
-import com.jasmeet.cinemate.data.repository.TopRatedMoviesRepository
+import com.jasmeet.cinemate.data.repository.movies.TopRatedMoviesRepository
 
 
 class TopRatedMoviesUseCase(private val repository: TopRatedMoviesRepository){

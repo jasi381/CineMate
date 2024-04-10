@@ -5,20 +5,29 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jasmeet.cinemate.data.apiService.ApiService
-import com.jasmeet.cinemate.data.repository.NowPlayingMoviesRepository
-import com.jasmeet.cinemate.data.repository.PopularMoviesRepository
-import com.jasmeet.cinemate.data.repository.TopRatedMoviesRepository
-import com.jasmeet.cinemate.data.repository.UpcomingMovieRepository
 import com.jasmeet.cinemate.data.repository.UserRepository
-import com.jasmeet.cinemate.data.repositoryImpl.NowPlayingRepositoryImpl
-import com.jasmeet.cinemate.data.repositoryImpl.PopularMoviesImpl
-import com.jasmeet.cinemate.data.repositoryImpl.TopRatedMoviesImpl
-import com.jasmeet.cinemate.data.repositoryImpl.UpcomingMoviesRepositoryImpl
+import com.jasmeet.cinemate.data.repository.movies.NowPlayingMoviesRepository
+import com.jasmeet.cinemate.data.repository.movies.TopRatedMoviesRepository
+import com.jasmeet.cinemate.data.repository.movies.TrendingMoviesRepository
+import com.jasmeet.cinemate.data.repository.movies.UpcomingMovieRepository
+import com.jasmeet.cinemate.data.repository.series.AiringTodayRepository
+import com.jasmeet.cinemate.data.repository.series.TopRatedSeriesRepository
+import com.jasmeet.cinemate.data.repository.series.TrendingSeriesRepository
 import com.jasmeet.cinemate.data.repositoryImpl.UserRepositoryImpl
+import com.jasmeet.cinemate.data.repositoryImpl.movies.NowPlayingRepositoryImpl
+import com.jasmeet.cinemate.data.repositoryImpl.movies.TopRatedMoviesImpl
+import com.jasmeet.cinemate.data.repositoryImpl.movies.TrendingMoviesImpl
+import com.jasmeet.cinemate.data.repositoryImpl.movies.UpcomingMoviesRepositoryImpl
+import com.jasmeet.cinemate.data.repositoryImpl.series.AiringTodayRepositoryImpl
+import com.jasmeet.cinemate.data.repositoryImpl.series.TopRatedSeriesSeriesRepositoryImpl
+import com.jasmeet.cinemate.data.repositoryImpl.series.TrendingSeriesRepositoryImpl
 import com.jasmeet.cinemate.domain.useCase.movies.NowPlayingMoviesUseCase
-import com.jasmeet.cinemate.domain.useCase.movies.PopularMoviesUseCase
 import com.jasmeet.cinemate.domain.useCase.movies.TopRatedMoviesUseCase
+import com.jasmeet.cinemate.domain.useCase.movies.TrendingMoviesUseCase
 import com.jasmeet.cinemate.domain.useCase.movies.UpcomingMovieUseCase
+import com.jasmeet.cinemate.domain.useCase.tvSeries.AiringTodayUseCase
+import com.jasmeet.cinemate.domain.useCase.tvSeries.TopRatedSeriesUseCase
+import com.jasmeet.cinemate.domain.useCase.tvSeries.TrendingSeriesUseCase
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -89,15 +98,21 @@ object AppModule {
             .create(ApiService::class.java)
     }
 
-    @Provides
-    @Singleton
-    fun providePopularMoviesRepository(apiService: ApiService): PopularMoviesRepository =
-        PopularMoviesImpl(apiService)
+
+    /**
+     * Provides All repositories and use cases for movies
+     */
+
 
     @Provides
     @Singleton
-    fun providesPopularMoviesUseCase(repository: PopularMoviesRepository): PopularMoviesUseCase =
-        PopularMoviesUseCase(repository)
+    fun provideTrendingMoviesRepository(apiService: ApiService): TrendingMoviesRepository =
+        TrendingMoviesImpl(apiService)
+
+    @Provides
+    @Singleton
+    fun providesTrendingMoviesUseCase(repository: TrendingMoviesRepository): TrendingMoviesUseCase =
+        TrendingMoviesUseCase(repository)
 
 
     @Provides
@@ -130,6 +145,42 @@ object AppModule {
     @Singleton
     fun providesUpcomingMoviesUseCase(repository: UpcomingMovieRepository): UpcomingMovieUseCase =
         UpcomingMovieUseCase(repository)
+
+
+    /**
+     * Provides All repositories and use cases for series
+     */
+
+    @Provides
+    @Singleton
+    fun providesTrendingSeriesRepository(apiService: ApiService): TrendingSeriesRepository =
+        TrendingSeriesRepositoryImpl(apiService)
+
+    @Provides
+    @Singleton
+    fun providesTrendingSeriesUseCase(repository: TrendingSeriesRepository): TrendingSeriesUseCase =
+        TrendingSeriesUseCase(repository)
+
+
+    @Provides
+    @Singleton
+    fun providesAiringSeriesRepository(apiService: ApiService): AiringTodayRepository =
+        AiringTodayRepositoryImpl(apiService)
+
+    @Provides
+    @Singleton
+    fun providesAiringTodaySeriesUseCase(repository: AiringTodayRepository): AiringTodayUseCase =
+        AiringTodayUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun providesTopRatedSeriesRepository(apiService: ApiService): TopRatedSeriesRepository =
+        TopRatedSeriesSeriesRepositoryImpl(apiService)
+
+    @Provides
+    @Singleton
+    fun providesTopRatedSeriesUseCase(repository: TopRatedSeriesRepository): TopRatedSeriesUseCase =
+        TopRatedSeriesUseCase(repository)
 }
 
 

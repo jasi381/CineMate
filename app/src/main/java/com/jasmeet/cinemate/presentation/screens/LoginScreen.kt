@@ -1,6 +1,5 @@
 package com.jasmeet.cinemate.presentation.screens
 
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
@@ -78,7 +77,6 @@ import com.jasmeet.cinemate.presentation.theme.customShapeTopCorners
 import com.jasmeet.cinemate.presentation.theme.libreBaskerville
 import com.jasmeet.cinemate.presentation.utils.Utils
 import com.jasmeet.cinemate.presentation.viewModel.SignInViewModel
-import com.jasmeet.customtoast.main.ToastMagic
 import com.jasmeet.customtoast.utils.Utils.CustomToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -439,7 +437,6 @@ fun LoginUi(
     val errorMessage by signInViewModel.errorState.collectAsState()
     val coroutine = rememberCoroutineScope()
 
-    val context = LocalContext.current
 
     if (errorMessage != null && errorMessage?.isNotEmpty() == true) {
         CustomToast(
@@ -520,11 +517,11 @@ fun LoginUi(
 
         TextComponent(
             text = "Forgot Password?", modifier = Modifier
-            .align(Alignment.End)
-            .padding(bottom = 22.dp, end = 5.dp)
-            .customClickable {
-               //TODO
-            },
+                .align(Alignment.End)
+                .padding(bottom = 22.dp, end = 5.dp)
+                .customClickable {
+                    //TODO
+                },
             textColor = Color.White,
             textSize = 15.sp,
             fontWeight = FontWeight.Normal,

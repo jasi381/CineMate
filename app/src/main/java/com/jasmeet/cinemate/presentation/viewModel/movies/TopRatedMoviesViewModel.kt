@@ -6,8 +6,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.jasmeet.cinemate.data.pagingSource.TopRatedMoviesPagingSource
-import com.jasmeet.cinemate.data.repository.TopRatedMoviesRepository
+import com.jasmeet.cinemate.data.pagingSource.movies.TopRatedMoviesPagingSource
+import com.jasmeet.cinemate.data.repository.movies.TopRatedMoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

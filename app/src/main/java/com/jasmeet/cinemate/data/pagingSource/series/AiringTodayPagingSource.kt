@@ -1,16 +1,15 @@
-package com.jasmeet.cinemate.data.pagingSource
+package com.jasmeet.cinemate.data.pagingSource.series
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.jasmeet.cinemate.data.apiResponse.remote.movies.nowPlaying.Result
-import com.jasmeet.cinemate.data.repository.NowPlayingMoviesRepository
+import com.jasmeet.cinemate.data.apiResponse.remote.tvSeries.airingToday.Result
+import com.jasmeet.cinemate.data.repository.series.AiringTodayRepository
 import retrofit2.HttpException
 import javax.inject.Inject
 
-class NowPlayingMoviesPagingSource @Inject constructor(
-    private val nowPlayingMoviesRepository: NowPlayingMoviesRepository
-) : PagingSource<Int, Result>(){
-
+class AiringTodayPagingSource @Inject constructor(
+    private val repository: AiringTodayRepository
+) : PagingSource<Int, Result>() {
     override fun getRefreshKey(state: PagingState<Int, Result>): Int? {
         return state.anchorPosition
     }
@@ -18,7 +17,7 @@ class NowPlayingMoviesPagingSource @Inject constructor(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Result> {
         val page = params.key ?: 1
 
-        val response = nowPlayingMoviesRepository.getNowPlayingMovies(
+        val response = repository.getAiringToday(
             page = page
         )
 
