@@ -31,7 +31,7 @@ import com.skydoves.landscapist.placeholder.shimmer.ShimmerPlugin
 @Composable
 fun MovieCarouselBox(it: Result) {
 
-    val imgUrl = Utils.getImageLinkWithSize(it.backdrop_path,ImgSize.w780)
+    val imgUrl = Utils.getImageLinkWithSize(it.backdrop_path,ImgSize.W780)
 
     Box(Modifier.clip(customShapeAllCorners)) {
         CoilImage(

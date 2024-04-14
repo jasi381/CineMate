@@ -45,7 +45,8 @@ fun NowPlayingMoviesView(
     nowPlayingMoviesViewModel: NowPlayingMoviesViewModel = hiltViewModel(),
     onItemClick: (String) -> Unit = {}
 ) {
-    val nowPlayingMoviesResponseState = nowPlayingMoviesViewModel.nowPlayingMovies.collectAsLazyPagingItems()
+    val nowPlayingMoviesResponseState =
+        nowPlayingMoviesViewModel.nowPlayingMovies.collectAsLazyPagingItems()
 
     Column(
         modifier = modifier
@@ -67,7 +68,7 @@ fun NowPlayingMoviesView(
             items(nowPlayingMoviesResponseState.itemCount) { index ->
                 val url = Utils.getImageLinkWithSize(
                     nowPlayingMoviesResponseState[index]?.backdrop_path,
-                    ImgSize.original
+                    ImgSize.Original
                 )
                 Box(
                     modifier = Modifier
@@ -113,6 +114,7 @@ fun NowPlayingMoviesView(
                         textSize = 16.sp,
                         textAlign = TextAlign.Center
                     )
+
 
                 }
 

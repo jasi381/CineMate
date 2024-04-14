@@ -6,6 +6,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.filter
 import com.jasmeet.cinemate.data.pagingSource.movies.TopRatedMoviesPagingSource
 import com.jasmeet.cinemate.data.repository.movies.TopRatedMoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.jasmeet.cinemate.data.apiResponse.remote.movies.topRated.Result
+import kotlinx.coroutines.flow.map
 
 
 @HiltViewModel
@@ -36,6 +38,11 @@ class TopRatedMoviesViewModel @Inject constructor(
                 ),
                 pagingSourceFactory = { TopRatedMoviesPagingSource(repository) }
             ).flow
+                .map { pagingData ->
+                    pagingData.filter { result ->
+                        result.backdrop_path != null
+                    }
+                }
                 .cachedIn(viewModelScope)
                 .collectLatest {
                     _topRatedMovies.value = it

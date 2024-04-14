@@ -66,7 +66,7 @@ fun TopRatedTvSeriesView(
             items(airingTvSeriesResponseState.itemCount) { index ->
                 val url = Utils.getImageLinkWithSize(
                     airingTvSeriesResponseState[index]?.backdrop_path,
-                    ImgSize.original
+                    ImgSize.Original
                 )
                 Box(
                     modifier = Modifier

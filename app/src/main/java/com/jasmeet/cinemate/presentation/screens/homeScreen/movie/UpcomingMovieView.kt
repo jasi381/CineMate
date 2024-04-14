@@ -67,7 +67,7 @@ fun UpcomingMoviesView(
             items(topRatedMovieResponseState.itemCount) { index ->
                 val url = Utils.getImageLinkWithSize(
                     topRatedMovieResponseState[index]?.backdrop_path,
-                    ImgSize.original
+                    ImgSize.Original
                 )
                 Box(
                     modifier = Modifier

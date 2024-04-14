@@ -1,5 +1,6 @@
 package com.jasmeet.cinemate.presentation.appComponents
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,7 +32,9 @@ import com.skydoves.landscapist.placeholder.shimmer.ShimmerPlugin
 @Composable
 fun TvSeriesCarouselBox(it:Result) {
 
-    val imgUrl = Utils.getImageLinkWithSize(it.backdrop_path, ImgSize.w780)
+    val imgUrl = Utils.getImageLinkWithSize(it.backdrop_path, ImgSize.W780)
+
+    Log.d("imgUrl", imgUrl)
 
     Box(Modifier.clip(customShapeAllCorners)) {
         CoilImage(

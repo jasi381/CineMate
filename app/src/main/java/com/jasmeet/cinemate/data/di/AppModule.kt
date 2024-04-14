@@ -6,19 +6,23 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jasmeet.cinemate.data.apiService.ApiService
 import com.jasmeet.cinemate.data.repository.UserRepository
+import com.jasmeet.cinemate.data.repository.movies.MovieDetailsRepository
 import com.jasmeet.cinemate.data.repository.movies.NowPlayingMoviesRepository
 import com.jasmeet.cinemate.data.repository.movies.TopRatedMoviesRepository
 import com.jasmeet.cinemate.data.repository.movies.TrendingMoviesRepository
 import com.jasmeet.cinemate.data.repository.movies.UpcomingMovieRepository
 import com.jasmeet.cinemate.data.repository.series.AiringTodayRepository
+import com.jasmeet.cinemate.data.repository.series.SeriesDetailsRepository
 import com.jasmeet.cinemate.data.repository.series.TopRatedSeriesRepository
 import com.jasmeet.cinemate.data.repository.series.TrendingSeriesRepository
 import com.jasmeet.cinemate.data.repositoryImpl.UserRepositoryImpl
+import com.jasmeet.cinemate.data.repositoryImpl.movies.MovieDetailsRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.movies.NowPlayingRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.movies.TopRatedMoviesImpl
 import com.jasmeet.cinemate.data.repositoryImpl.movies.TrendingMoviesImpl
 import com.jasmeet.cinemate.data.repositoryImpl.movies.UpcomingMoviesRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.series.AiringTodayRepositoryImpl
+import com.jasmeet.cinemate.data.repositoryImpl.series.SeriesDetailsRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.series.TopRatedSeriesSeriesRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.series.TrendingSeriesRepositoryImpl
 import com.jasmeet.cinemate.domain.useCase.movies.NowPlayingMoviesUseCase
@@ -146,6 +150,11 @@ object AppModule {
     fun providesUpcomingMoviesUseCase(repository: UpcomingMovieRepository): UpcomingMovieUseCase =
         UpcomingMovieUseCase(repository)
 
+    @Provides
+    @Singleton
+    fun providesMovieDetailsRepository(apiService: ApiService): MovieDetailsRepository =
+        MovieDetailsRepositoryImpl(apiService)
+
 
     /**
      * Provides All repositories and use cases for series
@@ -181,6 +190,11 @@ object AppModule {
     @Singleton
     fun providesTopRatedSeriesUseCase(repository: TopRatedSeriesRepository): TopRatedSeriesUseCase =
         TopRatedSeriesUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun providesSeriesDetailsRepository(apiService: ApiService): SeriesDetailsRepository =
+        SeriesDetailsRepositoryImpl(apiService)
 }
 
 

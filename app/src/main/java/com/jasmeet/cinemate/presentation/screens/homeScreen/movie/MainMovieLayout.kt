@@ -10,15 +10,22 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.jasmeet.cinemate.presentation.screens.Screens
 
 @Composable
-fun MainMovieLayout(modifier: Modifier = Modifier) {
+fun MainMovieLayout(modifier: Modifier = Modifier, navController: NavHostController) {
     Column(
         Modifier.verticalScroll(rememberScrollState())
     ) {
         BannerMoviesView(
             onItemClick = { movieId ->
-                Log.d("Banner", "HomeScreen: $movieId")
+                navController.navigate(
+                    Screens.Detail.passMoviesId(
+                        id = movieId,
+                        isMovie = true
+                    )
+                )
             }
         )
         Spacer(modifier = Modifier.height(10.dp))
@@ -26,7 +33,12 @@ fun MainMovieLayout(modifier: Modifier = Modifier) {
         NowPlayingMoviesView(
             modifier = Modifier.padding(horizontal = 8.dp),
             onItemClick = { movieId ->
-                Log.d("Now Playing", "HomeScreen: $movieId")
+                navController.navigate(
+                    Screens.Detail.passMoviesId(
+                        id = movieId,
+                        isMovie = true
+                    )
+                )
             }
         )
 
@@ -35,7 +47,12 @@ fun MainMovieLayout(modifier: Modifier = Modifier) {
         UpcomingMoviesView(
             modifier = Modifier.padding(horizontal = 8.dp),
             onItemClick = { movieId ->
-                Log.d("UpComing", "HomeScreen: $movieId")
+                navController.navigate(
+                    Screens.Detail.passMoviesId(
+                        id = movieId,
+                        isMovie = true
+                    )
+                )
 
             }
         )
@@ -47,7 +64,12 @@ fun MainMovieLayout(modifier: Modifier = Modifier) {
         TopRatedMoviesView(
             modifier = Modifier.padding(horizontal = 8.dp),
             onItemClick = { movieId ->
-                Log.d("Top Rated", "HomeScreen: $movieId")
+                navController.navigate(
+                    Screens.Detail.passMoviesId(
+                        id = movieId,
+                        isMovie = true
+                    )
+                )
 
             }
         )

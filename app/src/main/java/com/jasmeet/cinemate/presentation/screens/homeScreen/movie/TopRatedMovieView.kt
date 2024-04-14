@@ -33,12 +33,10 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.SubcomposeAsyncImage
 import com.jasmeet.cinemate.presentation.appComponents.TextComponent
-import com.jasmeet.cinemate.presentation.extensions.customClickable
 import com.jasmeet.cinemate.presentation.theme.customShapeAllCorners
 import com.jasmeet.cinemate.presentation.utils.ImgSize
 import com.jasmeet.cinemate.presentation.utils.Utils
 import com.jasmeet.cinemate.presentation.viewModel.movies.TopRatedMoviesViewModel
-import com.jasmeet.cinemate.data.apiResponse.remote.movies.topRated.Result
 
 @Composable
 fun TopRatedMoviesView(
@@ -69,7 +67,7 @@ fun TopRatedMoviesView(
             items(topRatedMovieResponseState.itemCount) { index ->
                 val url = Utils.getImageLinkWithSize(
                     topRatedMovieResponseState[index]?.backdrop_path,
-                    ImgSize.original
+                    ImgSize.Original
                 )
                 Box(
                     modifier = Modifier

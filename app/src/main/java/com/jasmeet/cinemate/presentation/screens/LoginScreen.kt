@@ -70,7 +70,7 @@ import com.jasmeet.cinemate.presentation.appComponents.PasswordFieldComponent
 import com.jasmeet.cinemate.presentation.appComponents.TextComponent
 import com.jasmeet.cinemate.presentation.appComponents.TextFieldComponent
 import com.jasmeet.cinemate.presentation.authLauncher.rememberFirebaseAuthLauncher
-import com.jasmeet.cinemate.presentation.extensions.customClickable
+import com.jasmeet.cinemate.presentation.appComponents.extensions.customClickable
 import com.jasmeet.cinemate.presentation.theme.customShapeAllCorners
 import com.jasmeet.cinemate.presentation.theme.customShapeBottomCorners
 import com.jasmeet.cinemate.presentation.theme.customShapeTopCorners

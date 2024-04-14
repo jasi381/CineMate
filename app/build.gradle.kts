@@ -116,6 +116,7 @@ dependencies {
     //hilt
     implementation(libs.hiltAndroid)
     implementation (libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.palette.ktx)
     ksp(libs.hiltCompiler)
     ksp(libs.hiltCompilerKapt)
 
@@ -123,6 +124,9 @@ dependencies {
     implementation(libs.room)
     implementation(libs.roomKtx)
     ksp(libs.roomCompiler)
+
+    //yt player view
+    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
 
     testImplementation(libs.junit)
 
@@ -133,5 +137,6 @@ dependencies {
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
     
 }

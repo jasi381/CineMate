@@ -1,5 +1,7 @@
 package com.jasmeet.cinemate.presentation.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -8,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
@@ -17,14 +18,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.jasmeet.cinemate.presentation.screens.DetailsScreen
+import com.jasmeet.cinemate.presentation.screens.ID
+import com.jasmeet.cinemate.presentation.screens.IS_MOVIE
 import com.jasmeet.cinemate.presentation.screens.homeScreen.HomeScreen
 import com.jasmeet.cinemate.presentation.screens.LoginScreen
 import com.jasmeet.cinemate.presentation.screens.Screens
 import com.jasmeet.cinemate.presentation.screens.SearchScreen
 import com.jasmeet.cinemate.presentation.screens.SplashScreen
+import com.jasmeet.cinemate.presentation.screens.VIDEO_ID
+import com.jasmeet.cinemate.presentation.screens.VideoScreen
 
+@RequiresApi(Build.VERSION_CODES.R)
 @Composable
 fun CineMateNavigator(
     windowSize: WindowSizeClass,
@@ -36,7 +45,7 @@ fun CineMateNavigator(
     NavHost(
         navController = navController,
         startDestination = Screens.Splash.route,
-        modifier = Modifier.background(Color(0xff131313)).fillMaxSize().padding(bottom = paddingValues.calculateBottomPadding())
+        modifier = Modifier.fillMaxSize()
     ) {
 
         composable(
@@ -97,7 +106,7 @@ fun CineMateNavigator(
                 )
             }
         ) {
-            HomeScreen()
+            HomeScreen(navController = navController, paddingValues = paddingValues)
         }
 
         composable(
@@ -151,7 +160,8 @@ fun CineMateNavigator(
             route = Screens.Profile.route,
             enterTransition = {
                 return@composable fadeIn(tween(1000))
-            }, exitTransition = {
+            },
+            exitTransition = {
                 return@composable slideOutOfContainer(
                     AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
                 )
@@ -173,6 +183,72 @@ fun CineMateNavigator(
             ) {
                 Text(text = "Profile", color = Color.White, fontSize = 22.sp)
             }
+        }
+
+        composable(
+            route = Screens.Detail.route,
+            enterTransition = {
+                return@composable fadeIn(tween(1000))
+            },
+            exitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            }, popEnterTransition = {
+                return@composable fadeIn(tween(1000))
+            },
+            popExitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            },
+            arguments =  listOf(
+                navArgument(ID){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument(IS_MOVIE.toString()){
+                    type = NavType.BoolType
+                }
+            )
+        ) {
+            DetailsScreen(
+                navController = navController,
+                id = it.arguments?.getString(ID),
+                isMovie = it.arguments?.getBoolean(IS_MOVIE.toString())
+            )
+        }
+
+        composable(
+            route = Screens.Video.route,
+            enterTransition = {
+                return@composable fadeIn(tween(1000))
+            },
+            exitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            }, popEnterTransition = {
+                return@composable fadeIn(tween(1000))
+            },
+            popExitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            },
+            arguments =  listOf(
+                navArgument(VIDEO_ID){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+            )
+        ) {
+            VideoScreen(
+                navController = navController,
+                id = it.arguments?.getString(VIDEO_ID),
+            )
         }
 
     }

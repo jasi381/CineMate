@@ -10,23 +10,35 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.jasmeet.cinemate.presentation.screens.Screens
 
 @Composable
-fun MainTvSeriesLayout(modifier: Modifier = Modifier) {
+fun MainTvSeriesLayout(modifier: Modifier = Modifier, navController: NavHostController) {
     Column(
         Modifier.verticalScroll(rememberScrollState())
     ) {
         BannerTvSeriesView(
-            onItemClick = { seriesid ->
-                Log.d("Banner", "HomeScreen: $seriesid")
+            onItemClick = { seriesId ->
+                navController.navigate(
+                    Screens.Detail.passMoviesId(
+                        id = seriesId,
+                        isMovie = false
+                    )
+                )
             }
         )
         Spacer(modifier = Modifier.height(10.dp))
 
         AiringTvSeriesView(
             modifier = Modifier.padding(horizontal = 8.dp),
-            onItemClick = { movieId ->
-                Log.d("Now Playing", "HomeScreen: $movieId")
+            onItemClick = { seriesId ->
+                navController.navigate(
+                    Screens.Detail.passMoviesId(
+                        id = seriesId,
+                        isMovie = false
+                    )
+                )
             }
         )
 
@@ -35,7 +47,12 @@ fun MainTvSeriesLayout(modifier: Modifier = Modifier) {
         TopRatedTvSeriesView(
             modifier = Modifier.padding(horizontal = 8.dp),
             onItemClick = { seriesId ->
-                Log.d("UpComing", "HomeScreen: $seriesId")
+                navController.navigate(
+                    Screens.Detail.passMoviesId(
+                        id = seriesId,
+                        isMovie = false
+                    )
+                )
 
             }
         )

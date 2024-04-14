@@ -1,7 +1,5 @@
 package com.jasmeet.cinemate.presentation.screens.homeScreen
 
-import android.app.Activity
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
@@ -13,10 +11,13 @@ import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,17 +27,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.jasmeet.cinemate.presentation.appComponents.CustomTab2
 import com.jasmeet.cinemate.presentation.screens.homeScreen.movie.MainMovieLayout
 import com.jasmeet.cinemate.presentation.screens.homeScreen.tvSeries.MainTvSeriesLayout
 import com.jasmeet.cinemate.presentation.theme.customShapeTopCorners
 
 @Composable
-fun HomeScreen(
-
-) {
+fun HomeScreen(navController: NavHostController, paddingValues: PaddingValues) {
 
     val tabs = listOf("Movies", "Tv Shows")
     var selectedTabIndex by rememberSaveable {
@@ -56,6 +55,7 @@ fun HomeScreen(
                     }
                 }
             )
+            .padding(bottom =  paddingValues.calculateBottomPadding())
     ) {
         Box(
             Modifier.fillMaxWidth(),
@@ -112,11 +112,11 @@ fun HomeScreen(
         ) { currentTabIndex ->
             when (currentTabIndex) {
                 0 -> {
-                    MainMovieLayout()
+                    MainMovieLayout(navController = navController)
                 }
 
                 1 -> {
-                    MainTvSeriesLayout()
+                    MainTvSeriesLayout(navController = navController)
                 }
             }
 

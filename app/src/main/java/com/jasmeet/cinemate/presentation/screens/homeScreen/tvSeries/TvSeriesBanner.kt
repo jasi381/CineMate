@@ -25,7 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.jasmeet.cinemate.R
 import com.jasmeet.cinemate.presentation.appComponents.PagerIndicator
 import com.jasmeet.cinemate.presentation.appComponents.TvSeriesCarouselBox
-import com.jasmeet.cinemate.presentation.extensions.carouselTransition
+import com.jasmeet.cinemate.presentation.appComponents.extensions.carouselTransition
 import com.jasmeet.cinemate.presentation.theme.customShapeAllCorners
 import com.jasmeet.cinemate.presentation.viewModel.series.BannerSeriesViewModel
 import kotlinx.coroutines.delay

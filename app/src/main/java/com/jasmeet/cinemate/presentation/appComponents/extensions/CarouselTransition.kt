@@ -1,4 +1,4 @@
-package com.jasmeet.cinemate.presentation.extensions
+package com.jasmeet.cinemate.presentation.appComponents.extensions
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.PagerState

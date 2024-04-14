@@ -1,4 +1,4 @@
-package com.jasmeet.cinemate.presentation.extensions
+package com.jasmeet.cinemate.presentation.appComponents.extensions
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

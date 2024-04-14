@@ -38,7 +38,7 @@ class TopRatedSeriesViewModel @Inject constructor(
             ).flow
                 .cachedIn(viewModelScope)
                 .map { pagingData ->
-                    pagingData.filter { result ->
+                    pagingData.filter   { result ->
                         result.backdrop_path != null
                     }
                 }
