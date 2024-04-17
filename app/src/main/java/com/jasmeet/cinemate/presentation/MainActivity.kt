@@ -1,13 +1,16 @@
 package com.jasmeet.cinemate.presentation
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
@@ -35,6 +38,7 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,6 +57,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.jasmeet.cinemate.R
 import com.jasmeet.cinemate.data.BottomNavigationItem
+import com.jasmeet.cinemate.data.themeSwitcher.DataStoreUtil
 import com.jasmeet.cinemate.presentation.appComponents.BottomBar
 import com.jasmeet.cinemate.presentation.appComponents.LottieComponent
 import com.jasmeet.cinemate.presentation.navigation.CineMateNavigator
@@ -66,20 +71,51 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private lateinit var dataStoreUtil: DataStoreUtil
+
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        dataStoreUtil = DataStoreUtil(applicationContext)
+
+
+
+        val systemTheme =
+            when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+                Configuration.UI_MODE_NIGHT_YES -> {
+                    true
+                }
+
+                Configuration.UI_MODE_NIGHT_NO -> {
+                    false
+                }
+
+                else -> {
+                    false
+                }
+            }
         super.onCreate(savedInstanceState)
 
 
         enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
+            statusBarStyle = SystemBarStyle.auto(android.graphics.Color.TRANSPARENT,android.graphics.Color.TRANSPARENT,),
             navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
         )
 
         setContent {
-            CineMateTheme {
+
+            val theme = dataStoreUtil.getTheme(systemTheme).collectAsState(initial = systemTheme)
+
+            Log.d("MainActivity", "onCreate: ${theme.value}")
+
+            CineMateTheme(theme.value) {
                 val windowSize = calculateWindowSizeClass(activity = this)
-                CineMateApp(windowSize = windowSize)
+                CineMateApp(
+                    windowSize = windowSize,
+                    dataStoreUtil= dataStoreUtil,
+                    theme= theme.value
+                )
 
             }
         }
@@ -88,9 +124,12 @@ class MainActivity : ComponentActivity() {
 }
 
 
+@SuppressLint("NewApi")
 @Composable
 fun CineMateApp(
-    windowSize: WindowSizeClass
+    windowSize: WindowSizeClass,
+    dataStoreUtil: DataStoreUtil,
+    theme: Boolean
 ) {
 
     val navController = rememberNavController()
@@ -166,7 +205,9 @@ fun CineMateApp(
             CineMateNavigator(
                 windowSize = windowSize,
                 navController = navController,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
+                theme = theme,
+                dataStoreUtil = dataStoreUtil
             )
         }
     }

@@ -1,5 +1,8 @@
 package com.jasmeet.cinemate.presentation.screens.homeScreen.tvSeries
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,13 +18,17 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
@@ -52,7 +59,7 @@ fun TopRatedTvSeriesView(
         TextComponent(
             text = "Top Rated",
             modifier = Modifier,
-            textColor = Color.White,
+            textColor = MaterialTheme.colorScheme.onBackground,
             textSize = 20.sp,
             fontWeight = FontWeight.SemiBold
         )
@@ -63,13 +70,32 @@ fun TopRatedTvSeriesView(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
 
             ) {
-            items(airingTvSeriesResponseState.itemCount) { index ->
+            items(
+                airingTvSeriesResponseState.itemCount,
+                key = {
+                   it.toString()
+                }
+            ) { index ->
+
                 val url = Utils.getImageLinkWithSize(
                     airingTvSeriesResponseState[index]?.backdrop_path,
                     ImgSize.Original
                 )
+                val animatable = remember{
+                    Animatable(0.7f)
+                }
+
+                LaunchedEffect(key1 = true) {
+                    animatable.animateTo( 1f, tween(350, delayMillis = 100,easing = FastOutSlowInEasing))
+
+                }
+
                 Box(
                     modifier = Modifier
+                        .graphicsLayer {
+                            this.scaleX = animatable.value
+                            this.scaleY = animatable.value
+                        }
                         .height(LocalConfiguration.current.screenHeightDp.dp * 0.19f)
                         .width(LocalConfiguration.current.screenWidthDp.dp * 0.6f)
                         .clip(customShapeAllCorners)
@@ -88,7 +114,7 @@ fun TopRatedTvSeriesView(
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .background(Color(0xff131313)),
+                                    .background(MaterialTheme.colorScheme.background.copy(0.5f)),
                                 contentAlignment = Alignment.Center
                             ) {
                                 CircularProgressIndicator(

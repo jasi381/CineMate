@@ -87,7 +87,7 @@ fun BannerMoviesView(
 
     DisposableEffect(Unit) {
         val job = coroutineScope.launch {
-            while (!isUserScrolling.value) {
+            while (true) {
                 if (!isUserScrolling.value) {
                     delay(3000L)
                     val nextPage = (pagerState.currentPage + 1) % pagerState.pageCount
@@ -98,13 +98,13 @@ fun BannerMoviesView(
                             easing = LinearEasing
                         )
                     )
-                } else {
-                    delay(100L)
                 }
+                delay(100L)
             }
         }
         onDispose {
             job.cancel()
         }
     }
+
 }

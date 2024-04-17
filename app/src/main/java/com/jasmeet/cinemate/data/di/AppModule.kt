@@ -7,29 +7,37 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.jasmeet.cinemate.data.apiService.ApiService
 import com.jasmeet.cinemate.data.repository.UserRepository
 import com.jasmeet.cinemate.data.repository.movies.MovieDetailsRepository
+import com.jasmeet.cinemate.data.repository.movies.MoviesCastRepository
 import com.jasmeet.cinemate.data.repository.movies.NowPlayingMoviesRepository
 import com.jasmeet.cinemate.data.repository.movies.TopRatedMoviesRepository
 import com.jasmeet.cinemate.data.repository.movies.TrendingMoviesRepository
 import com.jasmeet.cinemate.data.repository.movies.UpcomingMovieRepository
+import com.jasmeet.cinemate.data.repository.movies.VideoDetailsRepository
 import com.jasmeet.cinemate.data.repository.series.AiringTodayRepository
 import com.jasmeet.cinemate.data.repository.series.SeriesDetailsRepository
 import com.jasmeet.cinemate.data.repository.series.TopRatedSeriesRepository
 import com.jasmeet.cinemate.data.repository.series.TrendingSeriesRepository
 import com.jasmeet.cinemate.data.repositoryImpl.UserRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.movies.MovieDetailsRepositoryImpl
+import com.jasmeet.cinemate.data.repositoryImpl.movies.MoviesCastRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.movies.NowPlayingRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.movies.TopRatedMoviesImpl
 import com.jasmeet.cinemate.data.repositoryImpl.movies.TrendingMoviesImpl
 import com.jasmeet.cinemate.data.repositoryImpl.movies.UpcomingMoviesRepositoryImpl
+import com.jasmeet.cinemate.data.repositoryImpl.movies.VideoDetailsRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.series.AiringTodayRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.series.SeriesDetailsRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.series.TopRatedSeriesSeriesRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.series.TrendingSeriesRepositoryImpl
+import com.jasmeet.cinemate.domain.useCase.movies.MovieCastUseCase
+import com.jasmeet.cinemate.domain.useCase.movies.MovieDetailsUseCase
 import com.jasmeet.cinemate.domain.useCase.movies.NowPlayingMoviesUseCase
 import com.jasmeet.cinemate.domain.useCase.movies.TopRatedMoviesUseCase
 import com.jasmeet.cinemate.domain.useCase.movies.TrendingMoviesUseCase
 import com.jasmeet.cinemate.domain.useCase.movies.UpcomingMovieUseCase
+import com.jasmeet.cinemate.domain.useCase.movies.VideoDetailsUseCase
 import com.jasmeet.cinemate.domain.useCase.tvSeries.AiringTodayUseCase
+import com.jasmeet.cinemate.domain.useCase.tvSeries.SeriesDetailsUseCase
 import com.jasmeet.cinemate.domain.useCase.tvSeries.TopRatedSeriesUseCase
 import com.jasmeet.cinemate.domain.useCase.tvSeries.TrendingSeriesUseCase
 import com.squareup.moshi.Moshi
@@ -155,6 +163,31 @@ object AppModule {
     fun providesMovieDetailsRepository(apiService: ApiService): MovieDetailsRepository =
         MovieDetailsRepositoryImpl(apiService)
 
+    @Provides
+    @Singleton
+    fun providesMovieDetailsUseCase(repository: MovieDetailsRepository): MovieDetailsUseCase =
+        MovieDetailsUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun providesVideoMovieDetailsRepository(apiService: ApiService): VideoDetailsRepository =
+        VideoDetailsRepositoryImpl(apiService)
+
+    @Provides
+    @Singleton
+    fun providesVideoMovieDetailsUseCase(repository: VideoDetailsRepository): VideoDetailsUseCase =
+        VideoDetailsUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun providesVideoMovieCastRepository(apiService: ApiService): MoviesCastRepository =
+        MoviesCastRepositoryImpl(apiService)
+
+    @Provides
+    @Singleton
+    fun providesVideoMovieCastUseCase(repository: MoviesCastRepository): MovieCastUseCase =
+        MovieCastUseCase(repository)
+
 
     /**
      * Provides All repositories and use cases for series
@@ -195,6 +228,12 @@ object AppModule {
     @Singleton
     fun providesSeriesDetailsRepository(apiService: ApiService): SeriesDetailsRepository =
         SeriesDetailsRepositoryImpl(apiService)
+
+
+    @Provides
+    @Singleton
+    fun providesSeriesDetailsUseCase(repository: SeriesDetailsRepository): SeriesDetailsUseCase =
+        SeriesDetailsUseCase(repository)
 }
 
 

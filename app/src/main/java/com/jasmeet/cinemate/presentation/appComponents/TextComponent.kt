@@ -24,9 +24,8 @@ fun TextComponent(
     fontFamily: FontFamily = sans,
     fontWeight: FontWeight = FontWeight.Normal,
     textAlign: TextAlign = TextAlign.Start,
-    lineHeight: TextUnit = 24.sp,
     enableShadow: Boolean = false,
-    maxLines: Int = 1,
+    maxLines: Int = 2,
 ) {
     Text(
         text = text,
@@ -37,7 +36,6 @@ fun TextComponent(
             fontFamily = fontFamily,
             color = textColor,
             textAlign = textAlign,
-            lineHeight = lineHeight,
             shadow = if (enableShadow) Shadow(Color.Red, offset = Offset(3.0f, 4.0f), blurRadius = 3f) else null
         ),
         maxLines = maxLines,

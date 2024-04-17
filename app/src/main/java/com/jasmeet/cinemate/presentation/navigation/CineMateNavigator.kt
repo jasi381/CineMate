@@ -10,18 +10,34 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.LightMode
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.google.firebase.auth.FirebaseAuth
+import com.jasmeet.cinemate.data.themeSwitcher.DataStoreUtil
 import com.jasmeet.cinemate.presentation.screens.DetailsScreen
 import com.jasmeet.cinemate.presentation.screens.ID
 import com.jasmeet.cinemate.presentation.screens.IS_MOVIE
@@ -32,13 +48,16 @@ import com.jasmeet.cinemate.presentation.screens.SearchScreen
 import com.jasmeet.cinemate.presentation.screens.SplashScreen
 import com.jasmeet.cinemate.presentation.screens.VIDEO_ID
 import com.jasmeet.cinemate.presentation.screens.VideoScreen
+import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.R)
 @Composable
 fun CineMateNavigator(
     windowSize: WindowSizeClass,
     navController: NavHostController,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    theme: Boolean,
+    dataStoreUtil: DataStoreUtil
 ) {
 
 
@@ -174,14 +193,41 @@ fun CineMateNavigator(
                 )
             }
         ) {
+
+            var themeSwitchState by rememberSaveable { mutableStateOf(theme) }
+
+            val text = if (themeSwitchState) Color(0xff131313) else Color(0xffFFFFF0)
+
+
             Column(
                 Modifier
                     .fillMaxSize()
-                    .background(Color(0xff131313)),
+                    .background(text),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
+
+
                 Text(text = "Profile", color = Color.White, fontSize = 22.sp)
+                Button(onClick = {
+                    val auth = FirebaseAuth.getInstance()
+                    auth.signOut()
+                    val navOptions = NavOptions.Builder()
+                        .setPopUpTo(Screens.Home.route,inclusive = true)
+                        .build()
+
+                    navController.navigate(Screens.Login.route,navOptions)
+                }) {
+                    Text(text = "Logout")
+                }
+                ThemeSwitch(
+                    themeSwitchState,
+                    onCheckedChange = {
+                        themeSwitchState = it
+                    },
+                    dataStoreUtil = dataStoreUtil
+                )
             }
         }
 
@@ -252,4 +298,39 @@ fun CineMateNavigator(
         }
 
     }
+}
+
+@Composable
+fun ThemeSwitch(
+    isCheck: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    dataStoreUtil: DataStoreUtil
+) {
+    val coroutineScope = rememberCoroutineScope()
+
+    Switch(
+        checked = isCheck,
+        onCheckedChange = {
+            onCheckedChange(it)
+            coroutineScope.launch {
+                dataStoreUtil.saveTheme(it)
+            }
+        },
+        thumbContent = {
+            if (isCheck) {
+                Icon(
+                    imageVector = Icons.Outlined.DarkMode,
+                    contentDescription = null,
+                    modifier = Modifier.size(SwitchDefaults.IconSize)
+                )
+            } else {
+                Icon(
+                    imageVector = Icons.Outlined.LightMode,
+                    contentDescription = null,
+                    modifier = Modifier.size(SwitchDefaults.IconSize)
+                )
+
+            }
+        },
+    )
 }

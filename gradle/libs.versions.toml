@@ -1,7 +1,9 @@
 [versions]
-agp = "8.5.0-alpha03"
+agp = "8.5.0-alpha05"
 coilCompose = "2.6.0"
-firebaseBom = "32.8.0"
+ytPlayerViewVersion = "12.1.0"
+datastorePreferences = "1.0.0"
+firebaseBom = "32.8.1"
 kotlin = "1.9.23"
 coreKtx = "1.12.0"
 junit = "4.13.2"
@@ -20,19 +22,19 @@ runtimeLivedata = "1.6.5"
 material-icons = "1.6.5"
 lottie = "6.3.0"
 room = "2.6.1"
-kspVersion= "1.9.23-1.0.19"
-gms-services = "4.4.1"
+kspVersion= "1.9.23-1.0.20"
+gms-services = "4.3.15"
 hilt-android-compiler = "1.2.0"
-hiltVersion = "2.49"
+hiltVersion = "2.51.1"
 hiltNavigationCompose = "1.2.0"
 playServicesAuth = "21.0.0"
 firebaseAuth = "22.3.1"
 toastmagic = "0.1"
-googleServices = "4.4.1"
+googleServices = "4.3.15"
 okhttp = "5.0.0-alpha.12"
-moshiKotlin = "1.12.0"
-retrofit = "2.9.0"
-converterMoshi = "2.9.0"
+moshiKotlin = "1.15.1"
+retrofit = "2.11.0"
+converterMoshi = "2.11.0"
 pagingRuntimeKtx = "3.2.1"
 secrets = "2.0.1"
 paletteKtx = "1.0.0"
@@ -42,11 +44,14 @@ paletteKtx = "1.0.0"
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-material3-window-size = { module = "androidx.compose.material3:material3-window-size-class" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+ytPlayerView = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version.ref = "ytPlayerViewVersion" }
+
 
 
 #hilt

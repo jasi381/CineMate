@@ -11,6 +11,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemColors
@@ -42,7 +43,7 @@ fun BottomBar(
 ) {
     NavigationBar(
         tonalElevation = 10.dp,
-        containerColor = Color(0xff131313),
+        containerColor = MaterialTheme.colorScheme.background,
     ) {
         screens.forEach { screen ->
             AddBottomNavItem(
@@ -64,8 +65,8 @@ fun RowScope.AddBottomNavItem(
 
     val isSelected = currentDestination?.route == screen.route
 
-    val selectedColor = remember { Color(0xffF2C94C) }
-    val unselectedColor = remember { Color.White }
+    val selectedColor = remember { Color(0xffE50914) }
+    val unselectedColor = MaterialTheme.colorScheme.onBackground
     val targetColor = if (isSelected) selectedColor else unselectedColor
     val color by animateColorAsState(
         targetValue = targetColor,

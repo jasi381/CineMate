@@ -126,7 +126,10 @@ dependencies {
     ksp(libs.roomCompiler)
 
     //yt player view
-    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+    implementation (libs.ytPlayerView)
+
+    //datastore
+    implementation(libs.androidx.datastore.preferences)
 
     testImplementation(libs.junit)
 
