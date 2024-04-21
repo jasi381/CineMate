@@ -7,9 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jasmeet.cinemate.data.apiResponse.remote.movies.castAndCrew.MovieCastResponse
 import com.jasmeet.cinemate.data.apiResponse.remote.movies.details.MovieDetails
+import com.jasmeet.cinemate.data.apiResponse.remote.movies.media.MovieMediaResponse
 import com.jasmeet.cinemate.data.apiResponse.remote.movies.videoDetails.MovieVideoDetailsResponse
 import com.jasmeet.cinemate.data.apiResponse.remote.tvSeries.seriesDetails.SeriesDetailsResponse
 import com.jasmeet.cinemate.data.repository.movies.MovieDetailsRepository
+import com.jasmeet.cinemate.data.repository.movies.MovieMediaRepository
 import com.jasmeet.cinemate.data.repository.movies.MoviesCastRepository
 import com.jasmeet.cinemate.data.repository.movies.VideoDetailsRepository
 import com.jasmeet.cinemate.data.repository.series.SeriesDetailsRepository
@@ -23,7 +25,8 @@ class DetailsViewModel @Inject constructor(
     private val movieDetailsRepository: MovieDetailsRepository,
     private val seriesDetailsRepository: SeriesDetailsRepository,
     private val videoDetailsRepository: VideoDetailsRepository,
-    private val movieCastRepository: MoviesCastRepository
+    private val movieCastRepository: MoviesCastRepository,
+    private val movieMediaRepository: MovieMediaRepository
 ) : ViewModel() {
 
     private val _movieDetails = MutableLiveData<MovieDetails>()
@@ -37,6 +40,9 @@ class DetailsViewModel @Inject constructor(
 
     private val _movieCastDetails = MutableLiveData<MovieCastResponse>()
     val movieCastDetails :LiveData<MovieCastResponse> = _movieCastDetails
+
+    private val _movieMedia = MutableLiveData<MovieMediaResponse>()
+    val movieMedia :LiveData<MovieMediaResponse> = _movieMedia
 
 
     private val _isLoading = MutableLiveData<Boolean>()
@@ -96,6 +102,28 @@ class DetailsViewModel @Inject constructor(
                 _error.postValue(e.message ?: "An error occurred")
                 Log.d("Error",e.message.toString())
             }finally {
+                _isLoading.postValue(false)
+            }
+        }
+    }
+
+    fun getMovieMedia(id: String, isMovie: Boolean){
+        viewModelScope.launch {
+            _isLoading.postValue(true)
+            try {
+                if (isMovie) {
+                    val movieMedia = movieMediaRepository.getMovieMedia(id)
+                    _movieMedia.postValue(movieMedia)
+                    Log.d("MovieMedia", movieMedia.toString())
+                } else {
+                    val seriesDetails = seriesDetailsRepository.getSeriesDetails(id)
+                    _seriesDetails.postValue(seriesDetails)
+                    Log.d("SeriesMedia", seriesDetails.toString())
+                }
+            } catch (e: Exception) {
+                _error.postValue(e.message ?: "An error occurred")
+                Log.d("Error",e.message.toString())
+            } finally {
                 _isLoading.postValue(false)
             }
         }

@@ -2,7 +2,9 @@ package com.jasmeet.cinemate.data.apiService
 
 import com.jasmeet.cinemate.BuildConfig
 import com.jasmeet.cinemate.data.apiResponse.remote.movies.castAndCrew.MovieCastResponse
+import com.jasmeet.cinemate.data.apiResponse.remote.movies.characterMovies.CharacterMoviesResponse
 import com.jasmeet.cinemate.data.apiResponse.remote.movies.details.MovieDetails
+import com.jasmeet.cinemate.data.apiResponse.remote.movies.media.MovieMediaResponse
 import com.jasmeet.cinemate.data.apiResponse.remote.movies.nowPlaying.NowPlayingResponse
 import com.jasmeet.cinemate.data.apiResponse.remote.movies.topRated.TopRatedMoviesResponse
 import com.jasmeet.cinemate.data.apiResponse.remote.movies.trendingMovies.TrendingMovieResponse
@@ -39,13 +41,19 @@ interface ApiService {
     suspend fun getTrendingMovies(): TrendingMovieResponse
 
     @GET("movie/{movie_id}?api_key=$API_KEY&language=en-US")
-    suspend fun getMovieDetails(@Path("movie_id") id: String):MovieDetails
+    suspend fun getMovieDetails(@Path("movie_id") id: String): MovieDetails
 
     @GET("movie/{movie_id}/videos?language=en-US&api_key=$API_KEY")
-    suspend fun getMovieVideos(@Path("movie_id") id: String):MovieVideoDetailsResponse
+    suspend fun getMovieVideos(@Path("movie_id") id: String): MovieVideoDetailsResponse
 
     @GET("movie/{movie_id}/credits?language=en-US&api_key=$API_KEY")
-    suspend fun getMovieCast(@Path("movie_id") id: String):MovieCastResponse
+    suspend fun getMovieCast(@Path("movie_id") id: String): MovieCastResponse
+
+    @GET("person/{person_id}/movie_credits?language=en-US&api_key=$API_KEY")
+    suspend fun getCharacterMovies(@Path("person_id") id: String): CharacterMoviesResponse
+
+    @GET("movie/{movie_id}/images?api_key=$API_KEY")
+    suspend fun getMovieImages(@Path("movie_id") id: String): MovieMediaResponse
 
 
     /**
@@ -63,7 +71,7 @@ interface ApiService {
     suspend fun getTopRatedTvSeries(@Query("page") page: Int): TopRatedResponse
 
     @GET("tv/{series_id}?api_key=$API_KEY")
-    suspend fun getSeriesDetails(@Path("series_id") id: String):SeriesDetailsResponse
+    suspend fun getSeriesDetails(@Path("series_id") id: String): SeriesDetailsResponse
 
 
 }

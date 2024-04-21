@@ -6,7 +6,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jasmeet.cinemate.data.apiService.ApiService
 import com.jasmeet.cinemate.data.repository.UserRepository
+import com.jasmeet.cinemate.data.repository.movies.CharacterMoviesRepository
 import com.jasmeet.cinemate.data.repository.movies.MovieDetailsRepository
+import com.jasmeet.cinemate.data.repository.movies.MovieMediaRepository
 import com.jasmeet.cinemate.data.repository.movies.MoviesCastRepository
 import com.jasmeet.cinemate.data.repository.movies.NowPlayingMoviesRepository
 import com.jasmeet.cinemate.data.repository.movies.TopRatedMoviesRepository
@@ -18,7 +20,9 @@ import com.jasmeet.cinemate.data.repository.series.SeriesDetailsRepository
 import com.jasmeet.cinemate.data.repository.series.TopRatedSeriesRepository
 import com.jasmeet.cinemate.data.repository.series.TrendingSeriesRepository
 import com.jasmeet.cinemate.data.repositoryImpl.UserRepositoryImpl
+import com.jasmeet.cinemate.data.repositoryImpl.movies.CharacterMoviesRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.movies.MovieDetailsRepositoryImpl
+import com.jasmeet.cinemate.data.repositoryImpl.movies.MovieMediaRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.movies.MoviesCastRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.movies.NowPlayingRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.movies.TopRatedMoviesImpl
@@ -29,8 +33,10 @@ import com.jasmeet.cinemate.data.repositoryImpl.series.AiringTodayRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.series.SeriesDetailsRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.series.TopRatedSeriesSeriesRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.series.TrendingSeriesRepositoryImpl
+import com.jasmeet.cinemate.domain.useCase.movies.CharacterMoviesUseCase
 import com.jasmeet.cinemate.domain.useCase.movies.MovieCastUseCase
 import com.jasmeet.cinemate.domain.useCase.movies.MovieDetailsUseCase
+import com.jasmeet.cinemate.domain.useCase.movies.MovieMediaUseCase
 import com.jasmeet.cinemate.domain.useCase.movies.NowPlayingMoviesUseCase
 import com.jasmeet.cinemate.domain.useCase.movies.TopRatedMoviesUseCase
 import com.jasmeet.cinemate.domain.useCase.movies.TrendingMoviesUseCase
@@ -60,19 +66,19 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseAuth() : FirebaseAuth {
+    fun provideFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
     }
 
     @Provides
     @Singleton
-    fun provideFirebaseFirestore() : FirebaseFirestore {
+    fun provideFirebaseFirestore(): FirebaseFirestore {
         return FirebaseFirestore.getInstance()
     }
 
     @Provides
     @Singleton
-    fun providesFirebaseAnalytics(@ApplicationContext context: Context) : FirebaseAnalytics {
+    fun providesFirebaseAnalytics(@ApplicationContext context: Context): FirebaseAnalytics {
         return FirebaseAnalytics.getInstance(context)
     }
 
@@ -187,6 +193,26 @@ object AppModule {
     @Singleton
     fun providesVideoMovieCastUseCase(repository: MoviesCastRepository): MovieCastUseCase =
         MovieCastUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun providesVideoMovieCharacterRepository(apiService: ApiService): CharacterMoviesRepository =
+        CharacterMoviesRepositoryImpl(apiService)
+
+    @Provides
+    @Singleton
+    fun providesVideoMovieCharacterUseCase(repository: CharacterMoviesRepository): CharacterMoviesUseCase =
+        CharacterMoviesUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun providesVideoMovieMediaRepository(apiService: ApiService): MovieMediaRepository =
+        MovieMediaRepositoryImpl(apiService)
+
+    @Provides
+    @Singleton
+    fun providesVideoMovieMediaUseCase(repository: MovieMediaRepository): MovieMediaUseCase =
+        MovieMediaUseCase(repository)
 
 
     /**

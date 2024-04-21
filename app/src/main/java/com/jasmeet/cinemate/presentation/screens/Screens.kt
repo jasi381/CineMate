@@ -3,6 +3,9 @@ package com.jasmeet.cinemate.presentation.screens
 const val ID = "id"
 const val IS_MOVIE = false
 const val VIDEO_ID ="video_id"
+const val CHARACTER_ID ="char_id"
+const val CHARACTER_NAME ="char_name"
+const val CHARACTER_IMG ="char_img"
 
 
 sealed class Screens(val route :String) {
@@ -27,6 +30,15 @@ sealed class Screens(val route :String) {
                 .replace("{$ID}", id)
                 .replace("{$IS_MOVIE}", isMovie.toString())
 
+        }
+    }
+
+    data object CharacterDetails : Screens("character/{$CHARACTER_ID}/{$CHARACTER_NAME}/{$CHARACTER_IMG}"){
+        fun passCharacterId(id : String, name : String, img : String) : String{
+            return this.route
+                .replace("{$CHARACTER_ID}", id)
+                .replace("{$CHARACTER_NAME}", name)
+                .replace("{$CHARACTER_IMG}", img)
         }
     }
 

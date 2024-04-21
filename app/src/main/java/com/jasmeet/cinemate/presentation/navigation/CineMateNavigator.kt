@@ -38,6 +38,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
 import com.jasmeet.cinemate.data.themeSwitcher.DataStoreUtil
+import com.jasmeet.cinemate.presentation.screens.CHARACTER_ID
+import com.jasmeet.cinemate.presentation.screens.CHARACTER_IMG
+import com.jasmeet.cinemate.presentation.screens.CHARACTER_NAME
+import com.jasmeet.cinemate.presentation.screens.CharacterMoviesScreen
 import com.jasmeet.cinemate.presentation.screens.DetailsScreen
 import com.jasmeet.cinemate.presentation.screens.ID
 import com.jasmeet.cinemate.presentation.screens.IS_MOVIE
@@ -263,6 +267,49 @@ fun CineMateNavigator(
                 navController = navController,
                 id = it.arguments?.getString(ID),
                 isMovie = it.arguments?.getBoolean(IS_MOVIE.toString())
+            )
+        }
+
+        composable(
+            route = Screens.CharacterDetails.route,
+            enterTransition = {
+                return@composable fadeIn(tween(1000))
+            },
+            exitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            }, popEnterTransition = {
+                return@composable fadeIn(tween(1000))
+            },
+            popExitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            },
+            arguments =  listOf(
+                navArgument(CHARACTER_ID){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument(CHARACTER_NAME){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument(CHARACTER_IMG){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+            )
+        ) {
+            CharacterMoviesScreen(
+                navController = navController,
+                id = it.arguments?.getString(CHARACTER_ID),
+                name = it.arguments?.getString(CHARACTER_NAME),
+                img = it.arguments?.getString(CHARACTER_IMG),
             )
         }
 

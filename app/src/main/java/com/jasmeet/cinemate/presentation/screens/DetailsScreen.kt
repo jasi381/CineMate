@@ -1,6 +1,7 @@
 package com.jasmeet.cinemate.presentation.screens
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -55,8 +56,6 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.jasmeet.cinemate.R
-import com.jasmeet.cinemate.data.apiResponse.remote.movies.castAndCrew.Cast
-import com.jasmeet.cinemate.data.apiResponse.remote.movies.castAndCrew.Crew
 import com.jasmeet.cinemate.data.apiResponse.remote.movies.details.Genre
 import com.jasmeet.cinemate.presentation.appComponents.TextComponent
 import com.jasmeet.cinemate.presentation.appComponents.extensions.customClickable
@@ -72,6 +71,7 @@ import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.placeholder.shimmer.Shimmer
 import com.skydoves.landscapist.placeholder.shimmer.ShimmerPlugin
 import okhttp3.internal.trimSubstring
+import java.net.URLEncoder
 
 @RequiresApi(Build.VERSION_CODES.R)
 @Composable
@@ -87,11 +87,13 @@ fun DetailsScreen(
         detailsViewModel.fetchMovieDetails(id!!, isMovie!!)
         detailsViewModel.fetchVideoDetails(id)
         if (isMovie == true) detailsViewModel.fetchMovieCast(id)
+        detailsViewModel.getMovieMedia(id,true)
     }
 
     val movieDetails = detailsViewModel.movieDetails.observeAsState()
     val seriesDetails = detailsViewModel.seriesDetails.observeAsState()
     val castDetails = detailsViewModel.movieCastDetails.observeAsState()
+    val media = detailsViewModel.movieMedia.observeAsState()
 
     val isLoading = detailsViewModel.isLoading.observeAsState()
     val trailerId = detailsViewModel.trailerId.observeAsState()
@@ -427,80 +429,59 @@ fun DetailsScreen(
 
                     )
 
-                    TextComponent(
-                        text = "Cast & Crew",
-                        textColor = MaterialTheme.colorScheme.onBackground,
-                        textSize = 20.sp,
-                        modifier = Modifier
-                            .padding(horizontal = 20.dp, vertical = 15.dp)
-                            .fillMaxWidth(),
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 2,
+                    if (isMovie == true) {
+                        TextComponent(
+                            text = "Cast & Crew",
+                            textColor = MaterialTheme.colorScheme.onBackground,
+                            textSize = 20.sp,
+                            modifier = Modifier
+                                .padding(horizontal = 20.dp, vertical = 15.dp)
+                                .fillMaxWidth(),
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 2,
 
-                        )
+                            )
 
-                    LazyRow(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(start = 20.dp, end = 20.dp, bottom = 15.dp)
-                            .navigationBarsPadding(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-
-                        val combinedList = mutableListOf<Any>()
-                        combinedList.addAll(castDetails.value?.cast?.filter { it.profile_path != null }
-                            ?: emptyList())
-                        combinedList.addAll(castDetails.value?.crew?.filter { it.profile_path != null }
-                            ?: emptyList())
-
-                        items(
-                            combinedList,
-                            key = {
-                                it.toString()
-                            }
+                        LazyRow(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(start = 20.dp, end = 20.dp, bottom = 15.dp)
+                                .navigationBarsPadding(),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
 
-                            when (it) {
-                                is Cast -> {
-                                    val profileUrl =
-                                        Utils.getImageLinkWithSize(it.profile_path, ImgSize.W1280)
+                            val combinedList =
+                                castDetails.value?.cast?.filter { it.profile_path != null }
+                                    ?: emptyList()
 
-                                        Column(verticalArrangement = Arrangement.Center, modifier = Modifier.width(95.dp)){
-                                            CoilImage(
-                                                imageModel = { profileUrl },
-                                                modifier = Modifier
-                                                    .size(90.dp)
-                                                    .clip(CircleShape),
-                                                component = rememberImageComponent {
-                                                    +ShimmerPlugin(
-                                                        Shimmer.Resonate(
-                                                            baseColor = Color.Black,
-                                                            highlightColor = Color.LightGray,
-                                                        ),
-                                                    )
-                                                    +CircularRevealPlugin(
-                                                        duration = 350
-                                                    )
-                                                },
-                                                imageOptions = ImageOptions(contentScale = ContentScale.FillBounds),
+                            items(
+                                combinedList,
+                                key = {
+                                    it.toString()
+                                }
+                            ) {
 
+
+                                val profileUrl =
+                                    Utils.getImageLinkWithSize(it.profile_path, ImgSize.W1280)
+
+                                Column(
+                                    verticalArrangement = Arrangement.Center,
+                                    modifier = Modifier
+                                        .width(95.dp)
+                                        .customClickable {
+                                            navController.navigate(
+                                                Screens.CharacterDetails.passCharacterId(
+                                                    id = it.id.toString(),
+                                                    img = URLEncoder.encode(
+                                                        it.profile_path.toString(),
+                                                        "UTF-8"
+                                                    ),
+                                                    name = it.name.toString()
                                                 )
-                                            TextComponent(
-                                                text = it.name.toString(),
-                                                textColor = Color.White,
-                                                maxLines = 2,
-                                                textSize = 14.sp,
-                                                fontWeight = FontWeight.Bold,
-                                                modifier = Modifier.fillMaxWidth(),
-                                                textAlign = TextAlign.Center
                                             )
                                         }
-                                }
-
-                                is Crew -> {
-                                    val profileUrl =
-                                        Utils.getImageLinkWithSize(it.profile_path, ImgSize.W1280)
-
+                                ) {
                                     CoilImage(
                                         imageModel = { profileUrl },
                                         modifier = Modifier
@@ -518,10 +499,84 @@ fun DetailsScreen(
                                             )
                                         },
                                         imageOptions = ImageOptions(contentScale = ContentScale.FillBounds),
+
+                                        )
+                                    TextComponent(
+                                        text = it.name.toString(),
+                                        textColor = Color.White,
+                                        maxLines = 2,
+                                        textSize = 14.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        modifier = Modifier.fillMaxWidth(),
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    TextComponent(
+                        text = "Media",
+                        textColor = MaterialTheme.colorScheme.onBackground,
+                        textSize = 20.sp,
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp, vertical = 15.dp)
+                            .fillMaxWidth(),
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 2,
+                        )
+
+                    LazyRow(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp, end = 20.dp, bottom = 15.dp)
+                            .navigationBarsPadding(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+
+                        val combinedList =
+                            media.value?.backdrops?.filter {
+                                it.file_path != null
+                            }?.take(10)
+                                ?: emptyList()
+
+                        items(
+                            combinedList,
+                            key = {
+                                it.toString()
+                            }
+                        ) {
+
+
+                            val profileUrl = Utils.getImageLinkWithSize(it.file_path , ImgSize.W1280)
+
+
+                            Column(
+                                verticalArrangement = Arrangement.Center,
+                                modifier = Modifier
+                            ) {
+                                CoilImage(
+                                    imageModel = { profileUrl },
+                                    modifier = Modifier
+                                        .size(180.dp,120.dp)
+                                        .clip(customShapeAllCorners),
+                                    component = rememberImageComponent {
+                                        +ShimmerPlugin(
+                                            Shimmer.Resonate(
+                                                baseColor = Color.Black,
+                                                highlightColor = Color.LightGray,
+                                            ),
+                                        )
+                                        +CircularRevealPlugin(
+                                            duration = 350
+                                        )
+                                    },
+                                    imageOptions = ImageOptions(contentScale = ContentScale.FillBounds),
+                                    failure = { it ->
+                                        Text(text = it.reason?.message.toString())
+                                    }
+
                                     )
 
-
-                                }
                             }
                         }
                     }
