@@ -131,6 +131,10 @@ dependencies {
     //datastore
     implementation(libs.androidx.datastore.preferences)
 
+    //shared Transition
+    implementation(libs.androidx.animation)
+    implementation(libs.androidx.foundation)
+
     testImplementation(libs.junit)
 
     androidTestImplementation(libs.androidx.junit)
