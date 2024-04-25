@@ -23,8 +23,8 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jasmeet.cinemate.R
-import com.jasmeet.cinemate.presentation.appComponents.MovieCarouselBox
-import com.jasmeet.cinemate.presentation.appComponents.PagerIndicator
+import com.jasmeet.cinemate.presentation.appComponents.components.MovieCarouselBox
+import com.jasmeet.cinemate.presentation.appComponents.components.PagerIndicator
 import com.jasmeet.cinemate.presentation.appComponents.extensions.carouselTransition
 import com.jasmeet.cinemate.presentation.theme.customShapeAllCorners
 import com.jasmeet.cinemate.presentation.viewModel.movies.BannerMoviesViewModel

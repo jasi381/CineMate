@@ -45,13 +45,12 @@ import com.jasmeet.cinemate.presentation.screens.CharacterMoviesScreen
 import com.jasmeet.cinemate.presentation.screens.DetailsScreen
 import com.jasmeet.cinemate.presentation.screens.ID
 import com.jasmeet.cinemate.presentation.screens.IS_MOVIE
-import com.jasmeet.cinemate.presentation.screens.homeScreen.HomeScreen
 import com.jasmeet.cinemate.presentation.screens.LoginScreen
 import com.jasmeet.cinemate.presentation.screens.Screens
-import com.jasmeet.cinemate.presentation.screens.SearchScreen
 import com.jasmeet.cinemate.presentation.screens.SplashScreen
 import com.jasmeet.cinemate.presentation.screens.VIDEO_ID
 import com.jasmeet.cinemate.presentation.screens.VideoScreen
+import com.jasmeet.cinemate.presentation.screens.homeScreen.HomeScreen
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.R)
@@ -132,25 +131,6 @@ fun CineMateNavigator(
             HomeScreen(navController = navController, paddingValues = paddingValues)
         }
 
-        composable(
-            route = Screens.Search.route,
-            enterTransition = {
-                return@composable fadeIn(tween(1000))
-            }, exitTransition = {
-                return@composable slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
-                )
-            }, popEnterTransition = {
-                return@composable fadeIn(tween(1000))
-            },
-            popExitTransition = {
-                return@composable slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
-                )
-            }
-        ) {
-            SearchScreen(navController = navController)
-        }
         composable(
             route = Screens.Wishlist.route,
             enterTransition = {

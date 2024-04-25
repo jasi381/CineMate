@@ -1,4 +1,4 @@
-package com.jasmeet.cinemate.presentation.appComponents
+package com.jasmeet.cinemate.presentation.appComponents.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState

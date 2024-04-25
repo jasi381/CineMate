@@ -58,8 +58,8 @@ import androidx.navigation.compose.rememberNavController
 import com.jasmeet.cinemate.R
 import com.jasmeet.cinemate.data.BottomNavigationItem
 import com.jasmeet.cinemate.data.themeSwitcher.DataStoreUtil
-import com.jasmeet.cinemate.presentation.appComponents.BottomBar
-import com.jasmeet.cinemate.presentation.appComponents.LottieComponent
+import com.jasmeet.cinemate.presentation.appComponents.components.BottomBar
+import com.jasmeet.cinemate.presentation.appComponents.components.LottieComponent
 import com.jasmeet.cinemate.presentation.navigation.CineMateNavigator
 import com.jasmeet.cinemate.presentation.theme.CineMateTheme
 import com.jasmeet.cinemate.presentation.theme.libreBaskerville
@@ -138,9 +138,7 @@ fun CineMateApp(
     val currentDestination = navBackStackEntry?.destination
     val navigationItems = listOf(
         BottomNavigationItem.Home,
-        BottomNavigationItem.Search,
         BottomNavigationItem.Wishlist,
-        BottomNavigationItem.Profile
     )
 
     val bottomBarDestination = navigationItems.any {

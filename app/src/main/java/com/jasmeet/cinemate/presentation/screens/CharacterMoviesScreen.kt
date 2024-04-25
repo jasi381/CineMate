@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ElevatedCard
@@ -41,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.jasmeet.cinemate.presentation.appComponents.TextComponent
+import com.jasmeet.cinemate.presentation.appComponents.components.TextComponent
 import com.jasmeet.cinemate.presentation.appComponents.extensions.customClickable
 import com.jasmeet.cinemate.presentation.utils.ImgSize
 import com.jasmeet.cinemate.presentation.utils.Utils

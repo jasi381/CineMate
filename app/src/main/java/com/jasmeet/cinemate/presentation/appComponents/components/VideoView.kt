@@ -1,4 +1,4 @@
-package com.jasmeet.cinemate.presentation.appComponents
+package com.jasmeet.cinemate.presentation.appComponents.components
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -32,7 +32,9 @@ fun VideoView(
             }
 
         },
-        modifier = modifier.navigationBarsPadding().fillMaxSize()
+        modifier = modifier
+            .navigationBarsPadding()
+            .fillMaxSize()
     )
 
 }

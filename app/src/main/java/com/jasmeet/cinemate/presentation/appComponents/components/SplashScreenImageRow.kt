@@ -1,4 +1,4 @@
-package com.jasmeet.cinemate.presentation.appComponents
+package com.jasmeet.cinemate.presentation.appComponents.components
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -39,7 +39,9 @@ fun ImageRow(
                         )
                     ).build(),
                 contentDescription = null,
-                modifier = modifierImg.alpha(alpha(index).coerceIn(0.0f, 1.0f)).weight(1f),
+                modifier = modifierImg
+                    .alpha(alpha(index).coerceIn(0.0f, 1.0f))
+                    .weight(1f),
                 contentScale = contentScale,
                 filterQuality = FilterQuality.High
             )

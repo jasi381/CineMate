@@ -30,7 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import com.jasmeet.cinemate.R
-import com.jasmeet.cinemate.presentation.appComponents.LottieComponent
+import com.jasmeet.cinemate.presentation.appComponents.components.LottieComponent
 import com.jasmeet.cinemate.presentation.theme.libreBaskerville
 import com.jasmeet.cinemate.presentation.viewModel.SplashViewModel
 import kotlinx.coroutines.delay

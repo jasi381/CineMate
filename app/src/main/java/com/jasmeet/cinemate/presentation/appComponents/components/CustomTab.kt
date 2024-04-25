@@ -1,4 +1,4 @@
-package com.jasmeet.cinemate.presentation.appComponents
+package com.jasmeet.cinemate.presentation.appComponents.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
@@ -11,7 +11,6 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +35,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.jasmeet.cinemate.presentation.theme.libreBaskerville
 
 @Composable
@@ -155,7 +155,8 @@ fun RowScope.CustomTab2(
             textAlign = TextAlign.Center,
             textColor = tabTextColor,
             modifier = Modifier.padding(vertical = 2.dp),
-            fontFamily = libreBaskerville
+            fontFamily = libreBaskerville,
+            textSize = 16.sp
 
             )
 

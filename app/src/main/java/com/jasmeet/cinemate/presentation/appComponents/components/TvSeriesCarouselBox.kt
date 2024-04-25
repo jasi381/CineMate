@@ -1,5 +1,6 @@
-package com.jasmeet.cinemate.presentation.appComponents
+package com.jasmeet.cinemate.presentation.appComponents.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.jasmeet.cinemate.R
-import com.jasmeet.cinemate.data.apiResponse.remote.movies.trendingMovies.Result
+import com.jasmeet.cinemate.data.apiResponse.remote.tvSeries.trending.Result
 import com.jasmeet.cinemate.presentation.theme.customShapeAllCorners
 import com.jasmeet.cinemate.presentation.theme.libreBaskerville
 import com.jasmeet.cinemate.presentation.utils.ImgSize
@@ -29,9 +30,11 @@ import com.skydoves.landscapist.placeholder.shimmer.Shimmer
 import com.skydoves.landscapist.placeholder.shimmer.ShimmerPlugin
 
 @Composable
-fun MovieCarouselBox(it: Result) {
+fun TvSeriesCarouselBox(it:Result) {
 
-    val imgUrl = Utils.getImageLinkWithSize(it.backdrop_path,ImgSize.W780)
+    val imgUrl = Utils.getImageLinkWithSize(it.backdrop_path, ImgSize.W780)
+
+    Log.d("imgUrl", imgUrl)
 
     Box(Modifier.clip(customShapeAllCorners)) {
         CoilImage(
@@ -55,7 +58,7 @@ fun MovieCarouselBox(it: Result) {
         )
 
         Text(
-            text = it.title,
+            text = it.name,
             color = Color.White,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,

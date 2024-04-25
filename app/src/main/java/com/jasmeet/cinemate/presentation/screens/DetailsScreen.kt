@@ -1,7 +1,6 @@
 package com.jasmeet.cinemate.presentation.screens
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -57,7 +56,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.jasmeet.cinemate.R
 import com.jasmeet.cinemate.data.apiResponse.remote.movies.details.Genre
-import com.jasmeet.cinemate.presentation.appComponents.TextComponent
+import com.jasmeet.cinemate.presentation.appComponents.components.TextComponent
 import com.jasmeet.cinemate.presentation.appComponents.extensions.customClickable
 import com.jasmeet.cinemate.presentation.theme.customShapeAllCorners
 import com.jasmeet.cinemate.presentation.theme.libreBaskerville
@@ -87,7 +86,7 @@ fun DetailsScreen(
         detailsViewModel.fetchMovieDetails(id!!, isMovie!!)
         detailsViewModel.fetchVideoDetails(id)
         if (isMovie == true) detailsViewModel.fetchMovieCast(id)
-        detailsViewModel.getMovieMedia(id,true)
+        detailsViewModel.getMovieMedia(id, true)
     }
 
     val movieDetails = detailsViewModel.movieDetails.observeAsState()
@@ -503,7 +502,7 @@ fun DetailsScreen(
                                         )
                                     TextComponent(
                                         text = it.name.toString(),
-                                        textColor = Color.White,
+                                        textColor = MaterialTheme.colorScheme.onBackground,
                                         maxLines = 2,
                                         textSize = 14.sp,
                                         fontWeight = FontWeight.Bold,
@@ -523,7 +522,7 @@ fun DetailsScreen(
                             .fillMaxWidth(),
                         fontWeight = FontWeight.Bold,
                         maxLines = 2,
-                        )
+                    )
 
                     LazyRow(
                         Modifier
@@ -547,7 +546,7 @@ fun DetailsScreen(
                         ) {
 
 
-                            val profileUrl = Utils.getImageLinkWithSize(it.file_path , ImgSize.W1280)
+                            val profileUrl = Utils.getImageLinkWithSize(it.file_path, ImgSize.W1280)
 
 
                             Column(
@@ -557,7 +556,7 @@ fun DetailsScreen(
                                 CoilImage(
                                     imageModel = { profileUrl },
                                     modifier = Modifier
-                                        .size(180.dp,120.dp)
+                                        .size(180.dp, 120.dp)
                                         .clip(customShapeAllCorners),
                                     component = rememberImageComponent {
                                         +ShimmerPlugin(
@@ -575,7 +574,7 @@ fun DetailsScreen(
                                         Text(text = it.reason?.message.toString())
                                     }
 
-                                    )
+                                )
 
                             }
                         }
@@ -585,3 +584,5 @@ fun DetailsScreen(
         }
     }
 }
+
+

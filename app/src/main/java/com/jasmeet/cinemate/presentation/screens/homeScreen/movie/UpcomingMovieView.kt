@@ -39,7 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.SubcomposeAsyncImage
-import com.jasmeet.cinemate.presentation.appComponents.TextComponent
+import com.jasmeet.cinemate.presentation.appComponents.components.TextComponent
 import com.jasmeet.cinemate.presentation.theme.customShapeAllCorners
 import com.jasmeet.cinemate.presentation.utils.ImgSize
 import com.jasmeet.cinemate.presentation.utils.Utils

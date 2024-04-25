@@ -1,7 +1,5 @@
-package com.jasmeet.cinemate.presentation.appComponents
+package com.jasmeet.cinemate.presentation.appComponents.components
 
-import android.app.Activity
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.EaseInExpo
@@ -32,7 +30,6 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import com.jasmeet.cinemate.data.BottomNavigationItem
-import com.jasmeet.cinemate.presentation.screens.Screens
 import com.jasmeet.cinemate.presentation.theme.libreBaskerville
 
 @Composable
@@ -82,18 +79,17 @@ fun RowScope.AddBottomNavItem(
     )
 
 
-
-    BackHandler {
-        if (currentDestination?.route == Screens.Home.route) {
-            val activity = (context as? Activity)
-            activity?.finish()
-        } else {
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(screen.route, inclusive = true)
-                .build()
-            navHostController.navigate(Screens.Home.route, navOptions)
-        }
-    }
+//    BackHandler {
+//        if (currentDestination?.route == Screens.Home.route) {
+//            val activity = (context as? Activity)
+//            activity?.finish()
+//        } else {
+//            val navOptions = NavOptions.Builder()
+//                .setPopUpTo(screen.route, inclusive = true)
+//                .build()
+//            navHostController.navigate(Screens.Home.route, navOptions)
+//        }
+//    }
 
     NavigationBarItem(
         colors = NavigationBarItemColors(

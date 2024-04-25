@@ -1,4 +1,4 @@
-package com.jasmeet.cinemate.presentation.appComponents
+package com.jasmeet.cinemate.presentation.appComponents.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.padding

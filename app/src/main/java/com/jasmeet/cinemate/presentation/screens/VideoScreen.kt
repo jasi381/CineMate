@@ -25,7 +25,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavHostController
 import com.jasmeet.cinemate.R
-import com.jasmeet.cinemate.presentation.appComponents.VideoView
+import com.jasmeet.cinemate.presentation.appComponents.components.VideoView
 
 @RequiresApi(Build.VERSION_CODES.R)
 @Composable
@@ -65,7 +65,11 @@ fun VideoScreen(
 
 
 
-    Box(modifier = Modifier.background(Color(0x1A000000)).fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .background(Color(0x1A000000))
+            .fillMaxSize()
+    ) {
         // VideoView
         Box(Modifier.safeDrawingPadding()){id?.let { VideoView(id = it, lifecycleOwner = LocalLifecycleOwner.current) }}
 
