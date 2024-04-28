@@ -37,7 +37,7 @@ fun SearchBar(
     fontFamily: FontFamily = libreBaskerville,
     fontSize: TextUnit = 16.sp,
     enabled: Boolean = true,
-    onClear: () -> Unit = {}
+    onSearch: () -> Unit = {}
 ) {
     TextField(
         value = value,
@@ -52,10 +52,10 @@ fun SearchBar(
         ),
         trailingIcon = {
             if (value.isNotEmpty()) {
-                IconButton(onClick = { onClear.invoke() }) {
+                IconButton(onClick = { onSearch.invoke() }) {
 
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_error),
+                        painter = painterResource(id = R.drawable.ic_search_unselected),
                         contentDescription = null
                     )
 

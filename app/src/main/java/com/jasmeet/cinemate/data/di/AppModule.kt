@@ -11,6 +11,7 @@ import com.jasmeet.cinemate.data.repository.movies.MovieDetailsRepository
 import com.jasmeet.cinemate.data.repository.movies.MovieMediaRepository
 import com.jasmeet.cinemate.data.repository.movies.MoviesCastRepository
 import com.jasmeet.cinemate.data.repository.movies.NowPlayingMoviesRepository
+import com.jasmeet.cinemate.data.repository.movies.SearchMovieRepository
 import com.jasmeet.cinemate.data.repository.movies.TopRatedMoviesRepository
 import com.jasmeet.cinemate.data.repository.movies.TrendingMoviesRepository
 import com.jasmeet.cinemate.data.repository.movies.UpcomingMovieRepository
@@ -25,6 +26,7 @@ import com.jasmeet.cinemate.data.repositoryImpl.movies.MovieDetailsRepositoryImp
 import com.jasmeet.cinemate.data.repositoryImpl.movies.MovieMediaRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.movies.MoviesCastRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.movies.NowPlayingRepositoryImpl
+import com.jasmeet.cinemate.data.repositoryImpl.movies.SearchMovieRepositoryImpl
 import com.jasmeet.cinemate.data.repositoryImpl.movies.TopRatedMoviesImpl
 import com.jasmeet.cinemate.data.repositoryImpl.movies.TrendingMoviesImpl
 import com.jasmeet.cinemate.data.repositoryImpl.movies.UpcomingMoviesRepositoryImpl
@@ -38,6 +40,7 @@ import com.jasmeet.cinemate.domain.useCase.movies.MovieCastUseCase
 import com.jasmeet.cinemate.domain.useCase.movies.MovieDetailsUseCase
 import com.jasmeet.cinemate.domain.useCase.movies.MovieMediaUseCase
 import com.jasmeet.cinemate.domain.useCase.movies.NowPlayingMoviesUseCase
+import com.jasmeet.cinemate.domain.useCase.movies.SearchMovieUseCase
 import com.jasmeet.cinemate.domain.useCase.movies.TopRatedMoviesUseCase
 import com.jasmeet.cinemate.domain.useCase.movies.TrendingMoviesUseCase
 import com.jasmeet.cinemate.domain.useCase.movies.UpcomingMovieUseCase
@@ -213,6 +216,17 @@ object AppModule {
     @Singleton
     fun providesVideoMovieMediaUseCase(repository: MovieMediaRepository): MovieMediaUseCase =
         MovieMediaUseCase(repository)
+
+
+    @Provides
+    @Singleton
+    fun providesSearchedMoviesRepository(apiService: ApiService): SearchMovieRepository =
+        SearchMovieRepositoryImpl(apiService)
+
+    @Provides
+    @Singleton
+    fun providesSearchMoviesUseCase(repository: SearchMovieRepository): SearchMovieUseCase =
+        SearchMovieUseCase(repository)
 
 
     /**

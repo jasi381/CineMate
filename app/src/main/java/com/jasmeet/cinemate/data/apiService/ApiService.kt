@@ -6,6 +6,7 @@ import com.jasmeet.cinemate.data.apiResponse.remote.movies.characterMovies.Chara
 import com.jasmeet.cinemate.data.apiResponse.remote.movies.details.MovieDetails
 import com.jasmeet.cinemate.data.apiResponse.remote.movies.media.MovieMediaResponse
 import com.jasmeet.cinemate.data.apiResponse.remote.movies.nowPlaying.NowPlayingResponse
+import com.jasmeet.cinemate.data.apiResponse.remote.movies.searchedMovies.SearchedMovieResponse
 import com.jasmeet.cinemate.data.apiResponse.remote.movies.topRated.TopRatedMoviesResponse
 import com.jasmeet.cinemate.data.apiResponse.remote.movies.trendingMovies.TrendingMovieResponse
 import com.jasmeet.cinemate.data.apiResponse.remote.movies.upComing.UpcomingMovieResponse
@@ -54,6 +55,12 @@ interface ApiService {
 
     @GET("movie/{movie_id}/images?api_key=$API_KEY")
     suspend fun getMovieImages(@Path("movie_id") id: String): MovieMediaResponse
+
+    @GET("search/movie?api_key=$API_KEY&language=en-US&include_adult=false")
+    suspend fun getSearchedMovies(
+        @Query("query") query: String,
+        @Query("page") page: Int
+    ): SearchedMovieResponse
 
 
     /**
